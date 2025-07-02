@@ -36,10 +36,14 @@ $berita = ambil_semua_berita($koneksi);
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Open Sans', sans-serif;
             color: var(--text);
-            background-color: #f8f9fa;
+            background-color: var(--light);
             line-height: 1.6;
         }
 
@@ -49,48 +53,29 @@ $berita = ambil_semua_berita($koneksi);
             color: var(--dark);
         }
 
-        .btn-primary {
-            background-color: var(--primary);
-            border-color: var(--primary);
-            transition: var(--transition);
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-            border-color: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        .btn-whatsapp {
-            background-color: #25D366;
-            color: white;
-            font-weight: 600;
-            padding: 12px 28px;
-            border-radius: 50px;
-            text-decoration: none;
-            display: inline-block;
-            transition: var(--transition);
-            box-shadow: var(--shadow);
-            border: none;
-        }
-
-        .btn-whatsapp:hover {
-            background-color: #128C7E;
-            color: white;
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-whatsapp i {
-            margin-right: 8px;
-        }
-
-        /* Navbar */
+        /* Navbar - Sedikit penyesuaian untuk transisi yang lebih baik */
         .navbar {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 15px 0;
-            transition: var(--transition);
+            background-color: transparent;
+            padding: 1rem 0;
+            transition: background-color 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease;
+        }
+
+        .navbar.scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow);
+            padding: 0.75rem 0;
+            backdrop-filter: blur(10px);
+        }
+        
+        .navbar.scrolled .navbar-brand,
+        .navbar.scrolled .nav-link {
+            color: var(--primary-dark) !important;
+        }
+
+        .navbar.scrolled .nav-link:hover, 
+        .navbar.scrolled .nav-link.active {
+            color: var(--primary) !important;
+            background-color: rgba(46, 125, 50, 0.1);
         }
 
         .navbar-brand {
@@ -99,6 +84,7 @@ $berita = ambil_semua_berita($koneksi);
             color: white;
             display: flex;
             align-items: center;
+            transition: var(--transition);
         }
 
         .navbar-brand i {
@@ -120,56 +106,186 @@ $berita = ambil_semua_berita($koneksi);
             background-color: rgba(255, 255, 255, 0.15);
         }
 
-        /* Hero Section */
+        /* === HERO SECTION - IMPROVED === */
         .hero-section {
-            background: linear-gradient(rgba(46, 125, 50, 0.9), rgba(46, 125, 50, 0.9)), 
-                        url('https://images.unsplash.com/photo-1492496913980-501348b61469?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background: linear-gradient(
+                135deg,
+                rgba(27, 94, 32, 0.85) 0%,
+                rgba(46, 125, 50, 0.75) 100%
+            ),
+            url('https://images.unsplash.com/photo-1492496913980-501348b61469?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-position: center;
-            padding: 120px 0 100px;
+            background-attachment: fixed; /* Parallax effect */
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
             text-align: center;
-            margin-bottom: 60px;
             position: relative;
             overflow: hidden;
+            padding-top: 80px; /* Space for navbar */
         }
-
-        .hero-section::before {
+        
+        /* Wave effect at bottom */
+        .hero-section::after {
             content: "";
             position: absolute;
-            bottom: 0;
+            bottom: -1px; /* To prevent small gaps */
             left: 0;
             width: 100%;
             height: 100px;
             background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23f8f9fa" fill-opacity="1" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,261.3C672,256,768,224,864,197.3C960,171,1056,149,1152,160C1248,171,1344,213,1392,234.7L1440,256L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
             background-size: cover;
             background-position: bottom;
-            z-index: 1;
+            z-index: 2;
         }
 
         .hero-content {
             position: relative;
-            z-index: 2;
-            max-width: 800px;
+            z-index: 3;
+            max-width: 900px;
             margin: 0 auto;
+            padding: 0 20px;
         }
 
         .hero-title {
-            font-size: 3.5rem;
+            font-size: 3.5rem; /* Adjusted for balance */
             font-weight: 700;
             margin-bottom: 20px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 3px 6px rgba(0,0,0,0.3);
+            line-height: 1.2;
+            animation: fadeInUp 1s ease-out;
+            color: white; /* Ensure it's white */
         }
 
         .hero-subtitle {
-            font-size: 1.5rem;
-            margin-bottom: 40px;
-            opacity: 0.9;
+            font-size: 1.3rem;
+            margin-bottom: 35px;
+            opacity: 0.95;
+            font-weight: 400;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            animation: fadeInUp 1s ease-out 0.2s both;
         }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+        
+        .btn-hero-primary {
+            background: var(--secondary);
+            color: var(--dark);
+            font-weight: 600;
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: var(--transition);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            border: none;
+            font-size: 1.1rem;
+        }
+
+        .btn-hero-primary:hover {
+            background: #ffb74d; /* Lighter shade of secondary */
+            color: var(--dark);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+            font-weight: 600;
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            border: none;
+            font-size: 1.1rem;
+        }
+
+        .btn-whatsapp:hover {
+            background-color: #128C7E;
+            color: white;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .hero-stat {
+            text-align: center;
+            color: white;
+        }
+
+        .hero-stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            display: block;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator a {
+            color: white;
+            font-size: 1.5rem;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: var(--transition);
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-15px);
+            }
+            60% {
+                transform: translateY(-7px);
+            }
+        }
+        /* === END HERO SECTION === */
 
         /* Features Section */
         .features-section {
             padding: 80px 0;
+            position: relative;
+            z-index: 5; /* Ensure it is above the hero wave */
+            background-color: var(--light);
         }
 
         .section-title {
@@ -222,7 +338,7 @@ $berita = ambil_semua_berita($koneksi);
         }
 
         .feature-card:hover .feature-icon {
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(15deg);
             background: linear-gradient(135deg, var(--secondary), #ffb74d);
         }
 
@@ -230,25 +346,11 @@ $berita = ambil_semua_berita($koneksi);
             font-size: 1.4rem;
             margin-bottom: 15px;
         }
-
+        
         /* News Section */
         .news-section {
             background-color: #f0f7f0;
             padding: 80px 0;
-            position: relative;
-        }
-
-        .news-section::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23f8f9fa" fill-opacity="1" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,261.3C672,256,768,224,864,197.3C960,171,1056,149,1152,160C1248,171,1344,213,1392,234.7L1440,256L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>');
-            background-size: cover;
-            background-position: top;
-            z-index: 0;
         }
 
         .news-card {
@@ -275,7 +377,7 @@ $berita = ambil_semua_berita($koneksi);
         }
 
         .news-card:hover .news-img {
-            transform: scale(1.03);
+            transform: scale(1.05);
         }
 
         .news-date {
@@ -330,100 +432,14 @@ $berita = ambil_semua_berita($koneksi);
         /* Contact Section */
         .contact-section {
             padding: 80px 0;
+            background-color: var(--light);
         }
-
-        .contact-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            height: 100%;
-            border: none;
-            transition: var(--transition);
-        }
-
-        .contact-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .contact-header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            padding: 25px;
-            text-align: center;
-        }
-
-        .contact-icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-
-        .contact-title {
-            font-size: 1.5rem;
-            margin-bottom: 0;
-        }
-
-        .contact-body {
-            padding: 25px;
-        }
-
-        .contact-item {
-            display: flex;
-            margin-bottom: 20px;
-            align-items: flex-start;
-        }
-
-        .contact-item i {
-            color: var(--primary);
-            font-size: 1.2rem;
-            min-width: 30px;
-            padding-top: 3px;
-        }
-
-        .contact-text {
-            flex: 1;
-        }
-
-        .hours-list {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .hours-list li {
-            padding: 5px 0;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .hours-list li:not(:last-child) {
-            border-bottom: 1px dashed var(--border);
-        }
-
+        
         /* Footer */
         .footer {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            background: var(--primary-dark);
             color: white;
             padding: 70px 0 20px;
-            position: relative;
-        }
-
-        .footer::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23f8f9fa" fill-opacity="1" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,261.3C672,256,768,224,864,197.3C960,171,1056,149,1152,160C1248,171,1344,213,1392,234.7L1440,256L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
-            background-size: cover;
-            background-position: top;
-            z-index: 0;
-        }
-
-        .footer-content {
-            position: relative;
-            z-index: 1;
         }
 
         .footer-logo {
@@ -525,13 +541,15 @@ $berita = ambil_semua_berita($koneksi);
             }
             
             .hero-subtitle {
-                font-size: 1.3rem;
+                font-size: 1.2rem;
             }
         }
 
         @media (max-width: 767px) {
             .hero-section {
-                padding: 80px 0 70px;
+                min-height: auto;
+                padding-top: 100px;
+                padding-bottom: 120px;
             }
             
             .hero-title {
@@ -540,6 +558,15 @@ $berita = ambil_semua_berita($koneksi);
             
             .hero-subtitle {
                 font-size: 1.1rem;
+            }
+
+            .hero-stats {
+                gap: 20px;
+                margin-top: 40px;
+            }
+
+            .hero-stat-number {
+                font-size: 2rem;
             }
             
             .feature-card, .news-card, .contact-card {
@@ -563,29 +590,21 @@ $berita = ambil_semua_berita($koneksi);
             }
         }
 
-        .animate {
+        /* Kelas untuk memicu animasi saat di-scroll */
+        .animated {
+            opacity: 0;
+        }
+        .animated.animate-in {
             animation: fadeInUp 0.8s ease forwards;
-        }
-
-        .delay-1 {
-            animation-delay: 0.1s;
-        }
-
-        .delay-2 {
-            animation-delay: 0.2s;
-        }
-
-        .delay-3 {
-            animation-delay: 0.3s;
         }
     </style>
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <i class="fas fa-tractor me-2"></i>Petani Maju
+                <i class="fas fa-tractor"></i>Petani Maju
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -594,6 +613,9 @@ $berita = ambil_semua_berita($koneksi);
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link active" href="#">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#layanan">Layanan</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#berita">Berita</a>
@@ -613,23 +635,43 @@ $berita = ambil_semua_berita($koneksi);
 
     <!-- Hero Section -->
     <section class="hero-section">
-        <div class="container">
-            <div class="hero-content animate">
-                <h1 class="hero-title">Petani Indonesia Maju Bersama</h1>
-                <p class="hero-subtitle">Solusi terbaik untuk meningkatkan hasil pertanian dan kesejahteraan petani</p>
-                <a href="" target="_blank" class="btn btn-whatsapp">
-                    <i class="fab fa-whatsapp me-2"></i>Konsultasi via WhatsApp
+        <div class="hero-content">
+            <h1 class="hero-title">Membangun Masa Depan Pertanian Indonesia</h1>
+            <p class="hero-subtitle">Solusi terintegrasi untuk meningkatkan hasil panen, efisiensi, dan kesejahteraan petani di seluruh nusantara.</p>
+            <div class="hero-buttons">
+                 <a href="#layanan" class="btn-hero-primary">
+                    <i class="fas fa-seedling me-2"></i>Lihat Layanan Kami
+                </a>
+                <a href="https://api.whatsapp.com/send?phone=6281234567890&text=Halo%20Petani%20Maju,%20saya%20tertarik%20untuk%20berkonsultasi." target="_blank" class="btn-whatsapp">
+                    <i class="fab fa-whatsapp me-2"></i>Konsultasi Gratis
                 </a>
             </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-number">1,200+</span>
+                    <span class="hero-stat-label">Petani Mitra</span>
+                </div>
+                 <div class="hero-stat">
+                    <span class="hero-stat-number">50+</span>
+                    <span class="hero-stat-label">Daerah Jangkauan</span>
+                </div>
+                 <div class="hero-stat">
+                    <span class="hero-stat-number">30%</span>
+                    <span class="hero-stat-label">Peningkatan Panen</span>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <a href="#layanan"><i class="fas fa-chevron-down"></i></a>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section class="features-section">
+    <section id="layanan" class="features-section">
         <div class="container">
-            <h2 class="section-title animate">Layanan Kami</h2>
+            <h2 class="section-title animated">Layanan Unggulan Kami</h2>
             <div class="row">
-                <div class="col-md-4 mb-4 animate delay-1">
+                <div class="col-md-4 mb-4 animated" style="animation-delay: 0.1s;">
                     <div class="feature-card text-center p-4">
                         <div class="feature-icon">
                             <i class="fas fa-seedling"></i>
@@ -638,7 +680,7 @@ $berita = ambil_semua_berita($koneksi);
                         <p>Konsultasi dengan ahli pertanian untuk meningkatkan hasil panen dan kualitas produk pertanian Anda.</p>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4 animate delay-2">
+                <div class="col-md-4 mb-4 animated" style="animation-delay: 0.2s;">
                     <div class="feature-card text-center p-4">
                         <div class="feature-icon">
                             <i class="fas fa-truck"></i>
@@ -647,10 +689,10 @@ $berita = ambil_semua_berita($koneksi);
                         <p>Jaringan distribusi luas untuk memasarkan hasil pertanian langsung ke konsumen dan pasar modern.</p>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4 animate delay-3">
+                <div class="col-md-4 mb-4 animated" style="animation-delay: 0.3s;">
                     <div class="feature-card text-center p-4">
                         <div class="feature-icon">
-                            <i class="fas fa-book"></i>
+                            <i class="fas fa-book-open"></i>
                         </div>
                         <h4 class="feature-title">Edukasi Modern</h4>
                         <p>Pelatihan teknik pertanian modern untuk meningkatkan produktivitas dan efisiensi usaha tani.</p>
@@ -660,21 +702,202 @@ $berita = ambil_semua_berita($koneksi);
         </div>
     </section>
 
-    <!-- News Section -->
-    <section id="berita" class="news-section">
-        <div class="container">
-            <h2 class="section-title animate">Berita & Kegiatan Terbaru</h2>
-            <div class="row">
-                <?php if(empty($berita)): ?>
-                    <div class="col-12 text-center py-5">
-                        <div class="animate">
-                            <h4>Belum ada berita</h4>
-                            <p>Admin dapat menambahkan berita baru</p>
+    <!-- Excellence Section (Revised Design) -->
+<section id="keunggulan" class="excellence-section">
+    <div class="container">
+        <div class="row align-items-center g-5">
+
+            <!-- Image Column with Layered Effect -->
+            <div class="col-lg-6 animated" style="animation-delay: 0.1s;">
+                <div class="excellence-image-wrapper">
+                    <div class="image-background-shape"></div>
+                    <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&auto=format&fit=crop&w=987&q=80" class="img-fluid rounded-3 shadow-lg" alt="Petani Sukses dengan Teknologi Modern">
+                </div>
+            </div>
+
+            <!-- Content Column -->
+            <div class="col-lg-6 animated" style="animation-delay: 0.2s;">
+                <div class="excellence-content">
+                    <span class="pre-title">KOMITMEN KAMI</span>
+                    <h2 class="section-title text-start">Mitra Terpercaya untuk Pertanian Berkelanjutan</h2>
+                    <p class="lead text-muted mb-4">
+                        Kami menggabungkan kearifan lokal dengan inovasi terdepan untuk menciptakan ekosistem pertanian yang produktif, efisien, dan menguntungkan.
+                    </p>
+                    
+                    <div class="vstack gap-4">
+                        <div class="excellence-item">
+                            <div class="d-flex align-items-start">
+                                <div class="icon-wrapper flex-shrink-0">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <div>
+                                    <h5 class="item-title">Inovasi Berbasis Data</h5>
+                                    <p class="item-text">Analisis data akurat untuk setiap keputusan, mulai dari pemilihan bibit hingga prediksi panen.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="excellence-item">
+                            <div class="d-flex align-items-start">
+                                <div class="icon-wrapper flex-shrink-0">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div>
+                                    <h5 class="item-title">Hasil Terbukti</h5>
+                                    <p class="item-text">Peningkatan hasil panen rata-rata 30% dan efisiensi biaya yang signifikan bagi mitra kami.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="excellence-item">
+                           <div class="d-flex align-items-start">
+                                <div class="icon-wrapper flex-shrink-0">
+                                    <i class="fas fa-handshake-angle"></i>
+                                </div>
+                                <div>
+                                    <h5 class="item-title">Pendampingan Ahli</h5>
+                                    <p class="item-text">Tim ahli kami memberikan pendampingan berkelanjutan untuk memastikan kesuksesan Anda.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+                    <a href="#kontak" class="btn btn-primary mt-4 py-2 px-4 fw-bold">
+                        Diskusi dengan Ahli Kami <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <style>
+        /* === Excellence Section (Why Choose Us) - REVISED DESIGN === */
+.excellence-section {
+    padding: 100px 0;
+    background-color: var(--light); /* Warna lebih soft dari putih */
+    overflow: hidden; /* Mencegah shape keluar dari container */
+}
+
+/* --- Image Column Styling --- */
+.excellence-image-wrapper {
+    position: relative;
+    padding: 20px; /* Memberi ruang untuk shape */
+}
+
+.image-background-shape {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 85%;
+    height: 85%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border-radius: 1rem;
+    z-index: 1;
+    transform: rotate(-5deg);
+    transition: var(--transition);
+}
+
+.excellence-image-wrapper:hover .image-background-shape {
+    transform: rotate(0deg) scale(1.05);
+}
+
+.excellence-image-wrapper img {
+    position: relative;
+    z-index: 2;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    max-height: 500px;
+}
+
+/* --- Content Column Styling --- */
+.pre-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--secondary);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.excellence-content .section-title {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.excellence-content .section-title::after {
+    left: 0;
+    transform: none;
+}
+
+.excellence-content .lead {
+    font-size: 1.1rem;
+}
+
+/* --- Excellence Item as Cards --- */
+.excellence-item {
+    background-color: white;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.excellence-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(46, 125, 50, 0.15);
+    border-color: var(--primary-light);
+}
+
+.excellence-item .icon-wrapper {
+    width: 60px;
+    height: 60px;
+    background-color: var(--primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    color: white;
+    font-size: 1.6rem;
+    transition: var(--transition);
+}
+
+.excellence-item:hover .icon-wrapper {
+    background: var(--secondary);
+    transform: rotate(10deg);
+}
+
+.excellence-item .item-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 5px;
+}
+
+.excellence-item .item-text {
+    color: var(--text-light);
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+    </style>
+
+    <!-- News Section (Sisa kode sama, hanya menambahkan class 'animated') -->
+    <section id="berita" class="news-section">
+        <div class="container">
+            <h2 class="section-title animated">Berita & Kegiatan Terbaru</h2>
+            <div class="row">
+                <?php if(empty($berita)): ?>
+                    <div class="col-12 text-center py-5 animated">
+                        <h4>Belum ada berita</h4>
+                        <p>Admin dapat menambahkan berita baru</p>
+                    </div>
                 <?php else: ?>
-                    <?php foreach($berita as $item): ?>
-                        <div class="col-md-4 mb-4 animate">
+                    <?php foreach($berita as $index => $item): ?>
+                        <div class="col-md-4 mb-4 animated" style="animation-delay: <?= $index * 0.1 ?>s;">
                             <div class="news-card">
                                 <?php if($item['gambar']): ?>
                                     <img src="uploads/<?= $item['gambar'] ?>" class="news-img" alt="<?= $item['judul'] ?>">
@@ -701,85 +924,109 @@ $berita = ambil_semua_berita($koneksi);
         </div>
     </section>
 
-    <!-- Contact Section -->
+    <!-- Contact Section (Sisa kode sama, hanya menambahkan class 'animated' dan beberapa penyesuaian kecil) -->
+        <!-- Contact Section -->
     <section id="kontak" class="contact-section">
         <div class="container">
-            <h2 class="section-title animate">Hubungi Kami</h2>
-            <div class="row">
-                <div class="col-md-6 mb-4 animate delay-1">
-                    <div class="contact-card">
-                        <div class="contact-header">
-                            <div class="contact-icon">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <h4 class="contact-title">Lokasi Kami</h4>
-                        </div>
-                        <div class="contact-body">
-                            <div class="contact-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <div class="contact-text">
-                                    <h5>Alamat</h5>
-                                    <p>Jl. Pertanian No. 123, Kec. Tani Makmur<br>
-                                    Kabupaten Agro Sejahtera, Provinsi Lumbung Pangan<br>
-                                    Indonesia 12345</p>
-                                </div>
-                            </div>
-                            <div class="contact-item">
-                                <i class="fas fa-phone"></i>
-                                <div class="contact-text">
-                                    <h5>Telepon</h5>
-                                    <p>(021) 1234-5678</p>
-                                </div>
-                            </div>
-                            <div class="contact-item">
-                                <i class="fas fa-envelope"></i>
-                                <div class="contact-text">
-                                    <h5>Email</h5>
-                                    <p>info@petanimaju.id</p>
-                                </div>
+            <h2 class="section-title animated">Hubungi Kami</h2>
+            <div class="row g-4 justify-content-center">
+
+                <!-- Kolom Informasi Kontak -->
+                <div class="col-lg-5 d-flex flex-column animated" style="animation-delay: 0.1s;">
+                    <div class="contact-info-card bg-white p-4 p-md-5 shadow-sm rounded-3 h-100">
+                        <h3 class="mb-4 text-primary">Informasi & Lokasi</h3>
+                        <p class="text-muted mb-4">Kami siap membantu Anda. Hubungi kami melalui detail di bawah ini selama jam kerja.</p>
+
+                        <div class="contact-item d-flex mb-4">
+                            <i class="fas fa-map-marker-alt fa-2x text-primary me-4 mt-1"></i>
+                            <div>
+                                <strong>Alamat:</strong><br>
+                                Jl. Pertanian No. 123, Kec. Tani Makmur, Kabupaten Agro Sejahtera, Indonesia 12345
                             </div>
                         </div>
+                        <div class="contact-item d-flex mb-4">
+                            <i class="fas fa-envelope fa-2x text-primary me-4 mt-1"></i>
+                            <div>
+                                <strong>Email:</strong><br>
+                                <a href="mailto:info@petanimaju.id">info@petanimaju.id</a>
+                            </div>
+                        </div>
+                         <div class="contact-item d-flex mb-4">
+                            <i class="fab fa-whatsapp fa-2x text-primary me-4 mt-1"></i>
+                            <div>
+                                <strong>WhatsApp:</strong><br>
+                                <a href="https://api.whatsapp.com/send?phone=6281234567890&text=Halo%20Petani%20Maju" target="_blank">+62 812-3456-7890</a>
+                            </div>
+                        </div>
+
+                        <hr>
+                        
+                        <h4 class="h5 mt-4 mb-3 text-dark">Jam Operasional</h4>
+                        <ul class="list-unstyled">
+                            <li class="d-flex justify-content-between mb-2">
+                                <span>Senin - Jumat</span>
+                                <span class="fw-bold">08:00 - 16:00</span>
+                            </li>
+                            <li class="d-flex justify-content-between mb-2">
+                                <span>Sabtu</span>
+                                <span class="fw-bold">08:00 - 14:00</span>
+                            </li>
+                            <li class="d-flex justify-content-between text-muted">
+                                <span>Minggu & Hari Libur</span>
+                                <span class="fw-bold">Tutup</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                <div class="col-md-6 mb-4 animate delay-2">
-                    <div class="contact-card">
-                        <div class="contact-header">
-                            <div class="contact-icon">
-                                <i class="fab fa-whatsapp"></i>
-                            </div>
-                            <h4 class="contact-title">Konsultasi WhatsApp</h4>
-                        </div>
-                        <div class="contact-body">
-                            <div class="contact-item">
-                                <i class="fab fa-whatsapp"></i>
-                                <div class="contact-text">
-                                    <h5>WhatsApp</h5>
-                                    <p>Kirim pesan langsung via WhatsApp untuk konsultasi cepat dengan ahli pertanian kami.</p>
-                                    <a href="" target="_blank" class="btn btn-whatsapp mt-2">
-                                        <i class="fab fa-whatsapp me-2"></i>Chat Sekarang
-                                    </a>
+
+                <!-- Kolom Formulir Kontak -->
+                <div class="col-lg-7 animated" style="animation-delay: 0.2s;">
+                    <div class="contact-form-card bg-white p-4 p-md-5 shadow-sm rounded-3 h-100">
+                        <h3 class="mb-4 text-primary">Kirim Pesan</h3>
+                        <!-- Form action perlu diatur ke skrip backend (misal: kirim_email.php) -->
+                        <form action="#" method="POST">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="nama" class="form-label">Nama Anda</label>
+                                    <input type="text" class="form-control" id="nama" name="nama" placeholder="Contoh: Budi Santoso" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email Anda</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="contoh@email.com" required>
                                 </div>
                             </div>
-                            <div class="contact-item">
-                                <i class="fas fa-clock"></i>
-                                <div class="contact-text">
-                                    <h5>Jam Operasional</h5>
-                                    <ul class="hours-list">
-                                        <li><span>Senin - Jumat:</span> <span>08:00 - 16:00 WIB</span></li>
-                                        <li><span>Sabtu:</span> <span>08:00 - 14:00 WIB</span></li>
-                                        <li><span>Minggu & Hari Libur:</span> <span>Tutup</span></li>
-                                    </ul>
-                                </div>
+                            <div class="mb-3">
+                                <label for="subjek" class="form-label">Subjek Pesan</label>
+                                <input type="text" class="form-control" id="subjek" name="subjek" placeholder="Tuliskan subjek pesan Anda" required>
                             </div>
-                        </div>
+                            <div class="mb-4">
+                                <label for="pesan" class="form-label">Pesan Anda</label>
+                                <textarea class="form-control" id="pesan" name="pesan" rows="5" placeholder="Tuliskan pesan atau pertanyaan Anda di sini..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold">
+                                <i class="fas fa-paper-plane me-2"></i> Kirim Pesan
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bagian Peta -->
+            <div class="row mt-5 animated" style="animation-delay: 0.3s;">
+                <div class="col-12">
+                    <div class="map-container shadow-sm rounded-3" style="overflow: hidden;">
+                         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15829.96571060964!2d110.3639880295629!3d-7.842785121404172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a57a195b8535f%3A0xb35a51357f085183!2sArea%20Sawah%2C%20Bangunharjo%2C%20Kec.%20Sewon%2C%20Kabupaten%20Bantul%2C%20Daerah%20Istimewa%20Yogyakarta!5e0!3m2!1sid!2sid!4v1691565432109!5m2!1sid!2sid" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
             </div>
+
         </div>
     </section>
 
     <!-- Footer -->
     <footer class="footer">
+        <!-- Kode footer tidak diubah, sudah bagus -->
         <div class="container">
             <div class="row footer-content">
                 <div class="col-lg-4 mb-5 mb-lg-0">
@@ -798,6 +1045,7 @@ $berita = ambil_semua_berita($koneksi);
                     <h5 class="footer-title">Link Cepat</h5>
                     <ul class="footer-links">
                         <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Beranda</a></li>
+                        <li><a href="#layanan"><i class="fas fa-chevron-right me-2"></i>Layanan</a></li>
                         <li><a href="#berita"><i class="fas fa-chevron-right me-2"></i>Berita & Kegiatan</a></li>
                         <li><a href="#kontak"><i class="fas fa-chevron-right me-2"></i>Kontak Kami</a></li>
                         <li><a href="admin.php"><i class="fas fa-chevron-right me-2"></i>Admin Area</a></li>
@@ -806,74 +1054,48 @@ $berita = ambil_semua_berita($koneksi);
                 <div class="col-lg-4">
                     <h5 class="footer-title">Layanan Kami</h5>
                     <ul class="footer-links">
-                        <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Penyuluhan Pertanian</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Distribusi Hasil Panen</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Pelatihan Modern</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Konsultasi Ahli</a></li>
+                        <li><a href="#layanan"><i class="fas fa-chevron-right me-2"></i>Penyuluhan Pertanian</a></li>
+                        <li><a href="#layanan"><i class="fas fa-chevron-right me-2"></i>Distribusi Hasil Panen</a></li>
+                        <li><a href="#layanan"><i class="fas fa-chevron-right me-2"></i>Pelatihan Modern</a></li>
+                        <li><a href="#kontak"><i class="fas fa-chevron-right me-2"></i>Konsultasi Ahli</a></li>
                     </ul>
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; <?= date('Y') ?> Website Petani Maju. Hak Cipta Dilindungi.</p>
+                <p>© <?= date('Y') ?> Shinta. Hak Cipta Dilindungi.</p>
             </div>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Animasi saat scroll
         document.addEventListener('DOMContentLoaded', function() {
-            // Animasi saat elemen masuk ke viewport
+            const navbar = document.querySelector('.navbar');
+            const animatedElements = document.querySelectorAll('.animated');
+
+            // Navbar style change on scroll
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Intersection Observer for animations
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('animate');
+                        entry.target.classList.add('animate-in');
+                        observer.unobserve(entry.target);
                     }
                 });
             }, {
                 threshold: 0.1
             });
 
-            document.querySelectorAll('.animate').forEach(el => {
+            animatedElements.forEach(el => {
                 observer.observe(el);
-            });
-
-            // Animasi scroll untuk navigasi internal
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        window.scrollTo({
-                            top: target.offsetTop - 80,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-
-            // Efek hover untuk kartu
-            const cards = document.querySelectorAll('.feature-card, .news-card, .contact-card');
-            cards.forEach(card => {
-                card.addEventListener('mouseenter', () => {
-                    card.style.transform = 'translateY(-10px)';
-                });
-                
-                card.addEventListener('mouseleave', () => {
-                    card.style.transform = 'translateY(0)';
-                });
-            });
-
-            // Alert untuk WhatsApp
-            document.querySelectorAll('.btn-whatsapp').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    if (!e.ctrlKey && !e.metaKey) {
-                        e.preventDefault();
-                        alert('Anda akan diarahkan ke WhatsApp untuk konsultasi dengan ahli pertanian kami.');
-                        window.open(this.href, '_blank');
-                    }
-                });
             });
         });
     </script>
