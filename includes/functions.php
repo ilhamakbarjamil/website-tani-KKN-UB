@@ -1,0 +1,38 @@
+<?php
+// Fungsi untuk upload gambar
+function upload_gambar($file, $target_dir) {
+    $gambar = '';
+    
+    if ($file['name']) {
+        $target_file = $target_dir . basename($file["name"]);
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        
+        // Validasi file gambar
+        $check = getimagesize($file["tmp_name"]);
+        if ($check === false) {
+            return ['error' => 'File bukan gambar'];
+        }
+        
+        // Format yang diperbolehkan
+        $allowed = ['jpg', 'jpeg', 'png'];
+        if (!in_array($imageFileType, $allowed)) {
+            return ['error' => 'Format file tidak diizinkan. Gunakan JPG, JPEG, atau PNG'];
+        }
+        
+        // Coba upload
+        if (move_uploaded_file($file["tmp_name"], $target_file)) {
+            $gambar = basename($file["name"]);
+        } else {
+            return ['error' => 'Terjadi kesalahan saat mengupload gambar'];
+        }
+    }
+    return ['success' => $gambar];
+}
+
+// Fungsi untuk mengambil semua berita
+function ambil_semua_berita($koneksi) {
+    $query = "SELECT * FROM berita ORDER BY tanggal DESC";
+    $result = mysqli_query($koneksi, $query);
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+?>
