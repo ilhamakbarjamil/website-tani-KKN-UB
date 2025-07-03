@@ -1018,29 +1018,6 @@ $produk = [
                                 <div class="product-badge"><?= htmlspecialchars($item['kategori']) ?></div>
                             </div>
                             <div class="product-card-body">
-<<<<<<< HEAD
-                                <h5 class="product-title"><?= htmlspecialchars($item['nama']) ?></h5>
-                                <p class="product-desc"><?= htmlspecialchars($item['deskripsi']) ?></p>
-                                <div class="product-price"><?= htmlspecialchars($item['harga']) ?></div>
-                                <a href="#kontak" class="btn btn-primary mt-auto w-100">
-                                    <i class="fab fa-whatsapp me-2"></i>Pesan Sekarang
-                                </a>
-=======
-                                <!-- Menggunakan kolom 'nama_produk' -->
-                                <h5 class="product-title"><?= htmlspecialchars($item['nama_produk']) ?></h5>
-                                
-                                <!-- Menggunakan kolom 'deskripsi', dipotong agar tidak terlalu panjang -->
-                                <p class="product-desc"><?= htmlspecialchars(substr($item['deskripsi'], 0, 70)) ?>...</p>
-                                
-                                <!-- Menggunakan kolom 'harga' dan memformatnya -->
-                                <div class="product-price">Rp <?= number_format($item['harga'], 0, ',', '.') ?></div>
-                                
-                                <!-- Tombol aksi ke WhatsApp -->
-                                <a href="produk.php<?= urlencode($item['nama_produk']) ?>*" target="_blank" class="btn btn-primary mt-auto w-100">
-    <i class="fab fa-whatsapp me-2"></i>Pesan Sekarang
-</a>
-
->>>>>>> 95348ae (p)
                             </div>
                         </div>
                     </div>
