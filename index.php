@@ -1020,9 +1020,10 @@ if ($result_produk) {
                                 <div class="product-price">Rp <?= number_format($item['harga'], 0, ',', '.') ?></div>
                                 
                                 <!-- Tombol aksi ke WhatsApp -->
-                                <a href="https://api.whatsapp.com/send?phone=6281234567890&text=Halo%20Petani%20Maju,%20saya%20tertarik%20dengan%20produk%20*<?= urlencode($item['nama_produk']) ?>*" target="_blank" class="btn btn-primary mt-auto w-100">
+                                <a href="produk.php?nama=<?= urlencode($item['nama_produk']) ?>" target="_blank" class="btn btn-primary mt-auto w-100">
                                     <i class="fab fa-whatsapp me-2"></i>Pesan Sekarang
                                 </a>
+
                             </div>
                         </div>
                     </div>

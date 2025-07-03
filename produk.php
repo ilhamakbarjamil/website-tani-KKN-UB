@@ -134,9 +134,10 @@ $produk = ambil_semua_produk($koneksi);
                                     
                                     <!-- MODIFIKASI: Logika tombol berdasarkan stok -->
                                     <?php if($item['stok'] > 0): ?>
-    <a href="checkout.php?id_produk=<?= $item['id_produk'] ?>" class="btn btn-primary mt-auto w-100">
-        <i class="fas fa-shopping-cart me-2"></i>Beli Sekarang
-    </a>
+    <a href="https://wa.me/6281234567890?text=Halo%20saya%20ingin%20memesan%20produk%20<?= urlencode($item['nama_produk']) ?>%20dengan%20ID%20<?= $item['id_produk'] ?>" target="_blank" class="btn btn-primary mt-auto w-100">
+    <i class="fab fa-whatsapp me-2"></i>Pesan Sekarang
+</a>
+
 <?php else: ?>
     <button class="btn btn-secondary mt-auto w-100" disabled>
         <i class="fas fa-times-circle me-2"></i>Stok Habis
