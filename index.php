@@ -6,40 +6,17 @@ require_once 'includes/functions.php';
 $berita = ambil_semua_berita($koneksi);
 
 // BARU: Data produk (dummy). Nantinya bisa diganti dari database.
-$produk = [
-    [
-        'id' => 1,
-        'nama' => 'Bibit Jagung Hibrida B-52',
-        'kategori' => 'Bibit Unggul',
-        'deskripsi' => 'Bibit jagung dengan potensi hasil tinggi, tahan terhadap penyakit bulai dan karat daun.',
-        'harga' => 'Rp 95.000 /kg',
-        'gambar' => 'https://images.unsplash.com/photo-1598164077885-b0de3b137397?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60'
-    ],
-    [
-        'id' => 2,
-        'nama' => 'Pupuk Organik Granul Super',
-        'kategori' => 'Pupuk & Nutrisi',
-        'deskripsi' => 'Pupuk organik kaya akan unsur hara makro dan mikro untuk kesuburan tanah jangka panjang.',
-        'harga' => 'Rp 50.000 /sak',
-        'gambar' => 'https://images.unsplash.com/photo-1615114811259-a8ab2d65a883?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60'
-    ],
-    [
-        'id' => 3,
-        'nama' => 'Pestisida Nabati Neem Oil',
-        'kategori' => 'Perlindungan Tanaman',
-        'deskripsi' => 'Solusi alami untuk mengendalikan hama seperti kutu kebul dan ulat, aman bagi lingkungan.',
-        'harga' => 'Rp 75.000 /liter',
-        'gambar' => 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60' // Example image
-    ],
-    [
-        'id' => 4,
-        'nama' => 'Alat Semprot Elektrik 16L',
-        'kategori' => 'Peralatan Modern',
-        'deskripsi' => 'Alat semprot punggung dengan tenaga baterai, membuat pekerjaan lebih ringan dan efisien.',
-        'harga' => 'Rp 450.000 /unit',
-        'gambar' => 'https://images.unsplash.com/photo-1586796676735-2663428052a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60' // Example image
-    ]
-];
+// Letakkan bagian PHP ini di bagian atas file index.php atau sebelum section produk
+
+// Ambil 4 produk unggulan (terbaru dan stok tersedia) untuk ditampilkan di beranda
+$query_produk = "SELECT * FROM produk WHERE stok > 0 ORDER BY created_at DESC LIMIT 4";
+$result_produk = mysqli_query($koneksi, $query_produk);
+$produk_unggulan = [];
+if ($result_produk) {
+    while ($row = mysqli_fetch_assoc($result_produk)) {
+        $produk_unggulan[] = $row;
+    }
+}
 
 ?>
 
@@ -1006,25 +983,66 @@ $produk = [
     </section>
 
     <!-- BARU: Products Section -->
-    <section id="produk" class="products-section">
-        <div class="container">
-            <h2 class="section-title animated">Produk Unggulan Kami</h2>
+        <!-- MODIFIKASI: Bagian Section Produk yang sudah terhubung ke database -->
+<section id="produk" class="products-section">
+    <div class="container">
+        <h2 class="section-title animated">Produk Unggulan Kami</h2>
+        
+        <?php if (empty($produk_unggulan)): ?>
+            <div class="alert alert-light text-center">Saat ini belum ada produk unggulan yang ditampilkan.</div>
+        <?php else: ?>
             <div class="row">
-                <?php foreach($produk as $index => $item): ?>
+                <?php foreach($produk_unggulan as $index => $item): ?>
                     <div class="col-lg-3 col-md-6 mb-4 d-flex align-items-stretch animated" style="animation-delay: <?= $index * 0.1 ?>s;">
                         <div class="product-card">
                             <div class="product-img-wrapper">
-                                <img src="<?= htmlspecialchars($item['gambar']) ?>" class="product-img" alt="<?= htmlspecialchars($item['nama']) ?>">
-                                <div class="product-badge"><?= htmlspecialchars($item['kategori']) ?></div>
+                                <!-- Menampilkan gambar dari folder uploads/produk/ -->
+                                <?php if (!empty($item['gambar']) && file_exists('uploads/produk/' . $item['gambar'])): ?>
+                                    <img src="uploads/produk/<?= htmlspecialchars($item['gambar']) ?>" class="product-img" alt="<?= htmlspecialchars($item['nama_produk']) ?>">
+                                <?php else: ?>
+                                    <!-- Placeholder jika gambar tidak ada -->
+                                    <div class="d-flex justify-content-center align-items-center bg-light h-100">
+                                        <i class="fas fa-leaf fa-4x text-muted"></i>
+                                    </div>
+                                <?php endif; ?>
+
+                                <!-- Badge ketersediaan stok -->
+                                <div class="product-badge bg-success">Tersedia</div>
                             </div>
                             <div class="product-card-body">
+                                <!-- Menggunakan kolom 'nama_produk' -->
+                                <h5 class="product-title"><?= htmlspecialchars($item['nama_produk']) ?></h5>
+                                
+                                <!-- Menggunakan kolom 'deskripsi', dipotong agar tidak terlalu panjang -->
+                                <p class="product-desc"><?= htmlspecialchars(substr($item['deskripsi'], 0, 70)) ?>...</p>
+                                
+                                <!-- Menggunakan kolom 'harga' dan memformatnya -->
+                                <div class="product-price">Rp <?= number_format($item['harga'], 0, ',', '.') ?></div>
+                                
+                                <!-- Tombol aksi ke WhatsApp -->
+                                <a href="https://api.whatsapp.com/send?phone=6281234567890&text=Halo%20Petani%20Maju,%20saya%20tertarik%20dengan%20produk%20*<?= urlencode($item['nama_produk']) ?>*" target="_blank" class="btn btn-primary mt-auto w-100">
+                                    <i class="fab fa-whatsapp me-2"></i>Pesan Sekarang
+                                </a>
                             </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
             </div>
-        </div>
-    </section>
+
+            <!-- Tombol untuk melihat semua produk -->
+            <div class="text-center mt-4">
+                <a href="produk.php" class="btn btn-outline-primary fw-bold py-2 px-4">
+                    Lihat Semua Produk <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        <?php endif; ?>
+
+    </div>
+</section>
+
+
+
+
 
     <!-- News Section -->
     <section id="berita" class="news-section">

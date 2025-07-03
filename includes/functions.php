@@ -50,6 +50,7 @@ function ambil_semua_produk($koneksi) {
     return $produk;
 }
 
+
 // Fungsi ini juga akan berguna
 function ambil_satu_kolom($tabel, $kolom, $where_kolom, $where_nilai, $koneksi) {
     $query = "SELECT $kolom FROM $tabel WHERE $where_kolom = ?";
@@ -61,4 +62,6 @@ function ambil_satu_kolom($tabel, $kolom, $where_kolom, $where_nilai, $koneksi) 
     mysqli_stmt_close($stmt);
     return $data ? $data[$kolom] : null;
 }
+
+
 ?>
