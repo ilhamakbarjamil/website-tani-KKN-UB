@@ -4,6 +4,43 @@ require_once 'includes/functions.php';
 
 // Ambil semua berita
 $berita = ambil_semua_berita($koneksi);
+
+// BARU: Data produk (dummy). Nantinya bisa diganti dari database.
+$produk = [
+    [
+        'id' => 1,
+        'nama' => 'Bibit Jagung Hibrida B-52',
+        'kategori' => 'Bibit Unggul',
+        'deskripsi' => 'Bibit jagung dengan potensi hasil tinggi, tahan terhadap penyakit bulai dan karat daun.',
+        'harga' => 'Rp 95.000 /kg',
+        'gambar' => 'https://images.unsplash.com/photo-1598164077885-b0de3b137397?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60'
+    ],
+    [
+        'id' => 2,
+        'nama' => 'Pupuk Organik Granul Super',
+        'kategori' => 'Pupuk & Nutrisi',
+        'deskripsi' => 'Pupuk organik kaya akan unsur hara makro dan mikro untuk kesuburan tanah jangka panjang.',
+        'harga' => 'Rp 50.000 /sak',
+        'gambar' => 'https://images.unsplash.com/photo-1615114811259-a8ab2d65a883?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60'
+    ],
+    [
+        'id' => 3,
+        'nama' => 'Pestisida Nabati Neem Oil',
+        'kategori' => 'Perlindungan Tanaman',
+        'deskripsi' => 'Solusi alami untuk mengendalikan hama seperti kutu kebul dan ulat, aman bagi lingkungan.',
+        'harga' => 'Rp 75.000 /liter',
+        'gambar' => 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60' // Example image
+    ],
+    [
+        'id' => 4,
+        'nama' => 'Alat Semprot Elektrik 16L',
+        'kategori' => 'Peralatan Modern',
+        'deskripsi' => 'Alat semprot punggung dengan tenaga baterai, membuat pekerjaan lebih ringan dan efisien.',
+        'harga' => 'Rp 450.000 /unit',
+        'gambar' => 'https://images.unsplash.com/photo-1586796676735-2663428052a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60' // Example image
+    ]
+];
+
 ?>
 
 <!DOCTYPE html>
@@ -346,7 +383,208 @@ $berita = ambil_semua_berita($koneksi);
             font-size: 1.4rem;
             margin-bottom: 15px;
         }
+
+        /* === Excellence Section (Why Choose Us) - REVISED DESIGN === */
+        .excellence-section {
+            padding: 100px 0;
+            background-color: #ffffff;
+            overflow: hidden; 
+        }
+
+        .excellence-image-wrapper {
+            position: relative;
+            padding: 20px; 
+        }
+
+        .image-background-shape {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 85%;
+            height: 85%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 1rem;
+            z-index: 1;
+            transform: rotate(-5deg);
+            transition: var(--transition);
+        }
+
+        .excellence-image-wrapper:hover .image-background-shape {
+            transform: rotate(0deg) scale(1.05);
+        }
+
+        .excellence-image-wrapper img {
+            position: relative;
+            z-index: 2;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            max-height: 500px;
+        }
+        .pre-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--secondary);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .excellence-content .section-title {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .excellence-content .section-title::after {
+            left: 0;
+            transform: none;
+        }
+
+        .excellence-content .lead {
+            font-size: 1.1rem;
+        }
+        .excellence-item {
+            background-color: var(--light);
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: var(--transition);
+        }
+
+        .excellence-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(46, 125, 50, 0.15);
+            border-color: var(--primary-light);
+        }
+
+        .excellence-item .icon-wrapper {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            color: white;
+            font-size: 1.6rem;
+            transition: var(--transition);
+        }
+
+        .excellence-item:hover .icon-wrapper {
+            background: var(--secondary);
+            transform: rotate(10deg);
+        }
+
+        .excellence-item .item-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .excellence-item .item-text {
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
         
+        /* BARU: Styling untuk Section Produk */
+        .products-section {
+            padding: 80px 0;
+            background-color: var(--light);
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            height: 100%;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-img-wrapper {
+            position: relative;
+            height: 220px;
+        }
+        
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover .product-img {
+            transform: scale(1.05);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(27, 94, 32, 0.9);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+        }
+
+        .product-card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1; /* Membuat body mengisi sisa ruang */
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            flex-grow: 1; /* Mendorong harga dan tombol ke bawah */
+        }
+
+        .product-desc {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 15px;
+            min-height: 60px; /* Jaga tinggi deskripsi agar seragam */
+        }
+        
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+
+        .product-card .btn {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .product-card .btn:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+
         /* News Section */
         .news-section {
             background-color: #f0f7f0;
@@ -569,7 +807,7 @@ $berita = ambil_semua_berita($koneksi);
                 font-size: 2rem;
             }
             
-            .feature-card, .news-card, .contact-card {
+            .feature-card, .news-card, .contact-card, .product-card {
                 margin-bottom: 30px;
             }
             
@@ -616,6 +854,10 @@ $berita = ambil_semua_berita($koneksi);
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#layanan">Layanan</a>
+                    </li>
+                    <!-- BARU: Link Navbar Produk -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#produk">Produk</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#berita">Berita</a>
@@ -702,190 +944,95 @@ $berita = ambil_semua_berita($koneksi);
         </div>
     </section>
 
-    <!-- Excellence Section (Revised Design) -->
-<section id="keunggulan" class="excellence-section">
-    <div class="container">
-        <div class="row align-items-center g-5">
-
-            <!-- Image Column with Layered Effect -->
-            <div class="col-lg-6 animated" style="animation-delay: 0.1s;">
-                <div class="excellence-image-wrapper">
-                    <div class="image-background-shape"></div>
-                    <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&auto=format&fit=crop&w=987&q=80" class="img-fluid rounded-3 shadow-lg" alt="Petani Sukses dengan Teknologi Modern">
-                </div>
-            </div>
-
-            <!-- Content Column -->
-            <div class="col-lg-6 animated" style="animation-delay: 0.2s;">
-                <div class="excellence-content">
-                    <span class="pre-title">KOMITMEN KAMI</span>
-                    <h2 class="section-title text-start">Mitra Terpercaya untuk Pertanian Berkelanjutan</h2>
-                    <p class="lead text-muted mb-4">
-                        Kami menggabungkan kearifan lokal dengan inovasi terdepan untuk menciptakan ekosistem pertanian yang produktif, efisien, dan menguntungkan.
-                    </p>
-                    
-                    <div class="vstack gap-4">
-                        <div class="excellence-item">
-                            <div class="d-flex align-items-start">
-                                <div class="icon-wrapper flex-shrink-0">
-                                    <i class="fas fa-brain"></i>
-                                </div>
-                                <div>
-                                    <h5 class="item-title">Inovasi Berbasis Data</h5>
-                                    <p class="item-text">Analisis data akurat untuk setiap keputusan, mulai dari pemilihan bibit hingga prediksi panen.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="excellence-item">
-                            <div class="d-flex align-items-start">
-                                <div class="icon-wrapper flex-shrink-0">
-                                    <i class="fas fa-chart-line"></i>
-                                </div>
-                                <div>
-                                    <h5 class="item-title">Hasil Terbukti</h5>
-                                    <p class="item-text">Peningkatan hasil panen rata-rata 30% dan efisiensi biaya yang signifikan bagi mitra kami.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="excellence-item">
-                           <div class="d-flex align-items-start">
-                                <div class="icon-wrapper flex-shrink-0">
-                                    <i class="fas fa-handshake-angle"></i>
-                                </div>
-                                <div>
-                                    <h5 class="item-title">Pendampingan Ahli</h5>
-                                    <p class="item-text">Tim ahli kami memberikan pendampingan berkelanjutan untuk memastikan kesuksesan Anda.</p>
-                                </div>
-                            </div>
-                        </div>
+    <!-- Excellence Section -->
+    <section id="keunggulan" class="excellence-section">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6 animated" style="animation-delay: 0.1s;">
+                    <div class="excellence-image-wrapper">
+                        <div class="image-background-shape"></div>
+                        <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&auto=format&fit=crop&w=987&q=80" class="img-fluid rounded-3 shadow-lg" alt="Petani Sukses dengan Teknologi Modern">
                     </div>
-
-                    <a href="#kontak" class="btn btn-primary mt-4 py-2 px-4 fw-bold">
-                        Diskusi dengan Ahli Kami <i class="fas fa-arrow-right ms-2"></i>
-                    </a>
+                </div>
+                <div class="col-lg-6 animated" style="animation-delay: 0.2s;">
+                    <div class="excellence-content">
+                        <span class="pre-title">KOMITMEN KAMI</span>
+                        <h2 class="section-title text-start">Mitra Terpercaya untuk Pertanian Berkelanjutan</h2>
+                        <p class="lead text-muted mb-4">
+                            Kami menggabungkan kearifan lokal dengan inovasi terdepan untuk menciptakan ekosistem pertanian yang produktif, efisien, dan menguntungkan.
+                        </p>
+                        <div class="vstack gap-3">
+                            <div class="excellence-item">
+                                <div class="d-flex align-items-start">
+                                    <div class="icon-wrapper flex-shrink-0">
+                                        <i class="fas fa-brain"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="item-title">Inovasi Berbasis Data</h5>
+                                        <p class="item-text mb-0">Analisis data akurat untuk setiap keputusan, mulai dari pemilihan bibit hingga prediksi panen.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="excellence-item">
+                                <div class="d-flex align-items-start">
+                                    <div class="icon-wrapper flex-shrink-0">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="item-title">Hasil Terbukti</h5>
+                                        <p class="item-text mb-0">Peningkatan hasil panen rata-rata 30% dan efisiensi biaya yang signifikan bagi mitra kami.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="excellence-item">
+                               <div class="d-flex align-items-start">
+                                    <div class="icon-wrapper flex-shrink-0">
+                                        <i class="fas fa-handshake-angle"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="item-title">Pendampingan Ahli</h5>
+                                        <p class="item-text mb-0">Tim ahli kami memberikan pendampingan berkelanjutan untuk memastikan kesuksesan Anda.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#kontak" class="btn btn-primary mt-4 py-2 px-4 fw-bold">
+                            Diskusi dengan Ahli Kami <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-    <style>
-        /* === Excellence Section (Why Choose Us) - REVISED DESIGN === */
-.excellence-section {
-    padding: 100px 0;
-    background-color: var(--light); /* Warna lebih soft dari putih */
-    overflow: hidden; /* Mencegah shape keluar dari container */
-}
+    <!-- BARU: Products Section -->
+    <section id="produk" class="products-section">
+        <div class="container">
+            <h2 class="section-title animated">Produk Unggulan Kami</h2>
+            <div class="row">
+                <?php foreach($produk as $index => $item): ?>
+                    <div class="col-lg-3 col-md-6 mb-4 d-flex align-items-stretch animated" style="animation-delay: <?= $index * 0.1 ?>s;">
+                        <div class="product-card">
+                            <div class="product-img-wrapper">
+                                <img src="<?= htmlspecialchars($item['gambar']) ?>" class="product-img" alt="<?= htmlspecialchars($item['nama']) ?>">
+                                <div class="product-badge"><?= htmlspecialchars($item['kategori']) ?></div>
+                            </div>
+                            <div class="product-card-body">
+                                <h5 class="product-title"><?= htmlspecialchars($item['nama']) ?></h5>
+                                <p class="product-desc"><?= htmlspecialchars($item['deskripsi']) ?></p>
+                                <div class="product-price"><?= htmlspecialchars($item['harga']) ?></div>
+                                <a href="#kontak" class="btn btn-primary mt-auto w-100">
+                                    <i class="fab fa-whatsapp me-2"></i>Pesan Sekarang
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
 
-/* --- Image Column Styling --- */
-.excellence-image-wrapper {
-    position: relative;
-    padding: 20px; /* Memberi ruang untuk shape */
-}
-
-.image-background-shape {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 85%;
-    height: 85%;
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    border-radius: 1rem;
-    z-index: 1;
-    transform: rotate(-5deg);
-    transition: var(--transition);
-}
-
-.excellence-image-wrapper:hover .image-background-shape {
-    transform: rotate(0deg) scale(1.05);
-}
-
-.excellence-image-wrapper img {
-    position: relative;
-    z-index: 2;
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-    max-height: 500px;
-}
-
-/* --- Content Column Styling --- */
-.pre-title {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--secondary);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 10px;
-}
-
-.excellence-content .section-title {
-    text-align: left;
-    margin-bottom: 20px;
-}
-
-.excellence-content .section-title::after {
-    left: 0;
-    transform: none;
-}
-
-.excellence-content .lead {
-    font-size: 1.1rem;
-}
-
-/* --- Excellence Item as Cards --- */
-.excellence-item {
-    background-color: white;
-    padding: 20px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    transition: var(--transition);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-}
-
-.excellence-item:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 25px rgba(46, 125, 50, 0.15);
-    border-color: var(--primary-light);
-}
-
-.excellence-item .icon-wrapper {
-    width: 60px;
-    height: 60px;
-    background-color: var(--primary);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 20px;
-    color: white;
-    font-size: 1.6rem;
-    transition: var(--transition);
-}
-
-.excellence-item:hover .icon-wrapper {
-    background: var(--secondary);
-    transform: rotate(10deg);
-}
-
-.excellence-item .item-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--primary-dark);
-    margin-bottom: 5px;
-}
-
-.excellence-item .item-text {
-    color: var(--text-light);
-    line-height: 1.6;
-    margin-bottom: 0;
-}
-    </style>
-
-    <!-- News Section (Sisa kode sama, hanya menambahkan class 'animated') -->
+    <!-- News Section -->
     <section id="berita" class="news-section">
         <div class="container">
             <h2 class="section-title animated">Berita & Kegiatan Terbaru</h2>
@@ -924,14 +1071,11 @@ $berita = ambil_semua_berita($koneksi);
         </div>
     </section>
 
-    <!-- Contact Section (Sisa kode sama, hanya menambahkan class 'animated' dan beberapa penyesuaian kecil) -->
-        <!-- Contact Section -->
+    <!-- Contact Section -->
     <section id="kontak" class="contact-section">
         <div class="container">
             <h2 class="section-title animated">Hubungi Kami</h2>
             <div class="row g-4 justify-content-center">
-
-                <!-- Kolom Informasi Kontak -->
                 <div class="col-lg-5 d-flex flex-column animated" style="animation-delay: 0.1s;">
                     <div class="contact-info-card bg-white p-4 p-md-5 shadow-sm rounded-3 h-100">
                         <h3 class="mb-4 text-primary">Informasi & Lokasi</h3>
@@ -978,38 +1122,6 @@ $berita = ambil_semua_berita($koneksi);
                         </ul>
                     </div>
                 </div>
-
-                <!-- Kolom Formulir Kontak -->
-                <div class="col-lg-7 animated" style="animation-delay: 0.2s;">
-                    <div class="contact-form-card bg-white p-4 p-md-5 shadow-sm rounded-3 h-100">
-                        <h3 class="mb-4 text-primary">Kirim Pesan</h3>
-                        <!-- Form action perlu diatur ke skrip backend (misal: kirim_email.php) -->
-                        <form action="#" method="POST">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="nama" class="form-label">Nama Anda</label>
-                                    <input type="text" class="form-control" id="nama" name="nama" placeholder="Contoh: Budi Santoso" required>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="email" class="form-label">Email Anda</label>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="contoh@email.com" required>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="subjek" class="form-label">Subjek Pesan</label>
-                                <input type="text" class="form-control" id="subjek" name="subjek" placeholder="Tuliskan subjek pesan Anda" required>
-                            </div>
-                            <div class="mb-4">
-                                <label for="pesan" class="form-label">Pesan Anda</label>
-                                <textarea class="form-control" id="pesan" name="pesan" rows="5" placeholder="Tuliskan pesan atau pertanyaan Anda di sini..." required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold">
-                                <i class="fas fa-paper-plane me-2"></i> Kirim Pesan
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
             </div>
 
             <!-- Bagian Peta -->
@@ -1026,7 +1138,6 @@ $berita = ambil_semua_berita($koneksi);
 
     <!-- Footer -->
     <footer class="footer">
-        <!-- Kode footer tidak diubah, sudah bagus -->
         <div class="container">
             <div class="row footer-content">
                 <div class="col-lg-4 mb-5 mb-lg-0">
@@ -1046,6 +1157,7 @@ $berita = ambil_semua_berita($koneksi);
                     <ul class="footer-links">
                         <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Beranda</a></li>
                         <li><a href="#layanan"><i class="fas fa-chevron-right me-2"></i>Layanan</a></li>
+                        <li><a href="#produk"><i class="fas fa-chevron-right me-2"></i>Produk</a></li>
                         <li><a href="#berita"><i class="fas fa-chevron-right me-2"></i>Berita & Kegiatan</a></li>
                         <li><a href="#kontak"><i class="fas fa-chevron-right me-2"></i>Kontak Kami</a></li>
                         <li><a href="admin.php"><i class="fas fa-chevron-right me-2"></i>Admin Area</a></li>
