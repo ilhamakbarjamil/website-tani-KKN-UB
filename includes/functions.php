@@ -35,4 +35,30 @@ function ambil_semua_berita($koneksi) {
     $result = mysqli_query($koneksi, $query);
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
+
+// Tambahkan fungsi ini di includes/functions.php
+
+function ambil_semua_produk($koneksi) {
+    $produk = [];
+    $query = "SELECT * FROM produk ORDER BY created_at DESC";
+    $result = mysqli_query($koneksi, $query);
+    if ($result) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $produk[] = $row;
+        }
+    }
+    return $produk;
+}
+
+// Fungsi ini juga akan berguna
+function ambil_satu_kolom($tabel, $kolom, $where_kolom, $where_nilai, $koneksi) {
+    $query = "SELECT $kolom FROM $tabel WHERE $where_kolom = ?";
+    $stmt = mysqli_prepare($koneksi, $query);
+    mysqli_stmt_bind_param($stmt, "i", $where_nilai);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $data = mysqli_fetch_assoc($result);
+    mysqli_stmt_close($stmt);
+    return $data ? $data[$kolom] : null;
+}
 ?>
