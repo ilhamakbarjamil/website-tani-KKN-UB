@@ -1,28 +1,46 @@
-// Animasi scroll untuk navigasi
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-        });
-    });
-});
-
-// Alert untuk fitur WhatsApp
-document.querySelectorAll('.whatsapp-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        alert('Anda akan diarahkan ke WhatsApp untuk konsultasi dengan ahli pertanian kami.');
-    });
-});
-
-// Fungsi untuk menghilangkan alert setelah beberapa detik
 document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(function() {
-        const alerts = document.querySelectorAll('.alert');
-        alerts.forEach(alert => {
-            alert.style.transition = 'opacity 0.5s ease-out';
-            alert.style.opacity = '0';
-            setTimeout(() => alert.remove(), 500);
+
+    // 1. Hamburger Menu Toggle
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+
+    // Menutup menu saat link di-klik
+    document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+    }));
+    
+    // 2. Smooth Scrolling
+    // (CSS `scroll-behavior: smooth;` sudah menangani ini untuk klik link #, 
+    // tapi ini adalah cara JS alternatif jika diperlukan)
+    // Dibiarkan simpel dengan CSS
+
+    // 3. Fade-in on Scroll Animation
+    const faders = document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right');
+
+    const appearOptions = {
+        threshold: 0.2, // Elemen akan muncul saat 20% terlihat
+        rootMargin: "0px 0px -50px 0px" // Sedikit delay sebelum trigger
+    };
+
+    const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) {
+                return;
+            } else {
+                entry.target.classList.add('is-visible');
+                appearOnScroll.unobserve(entry.target);
+            }
         });
-    }, 5000);
+    }, appearOptions);
+
+    faders.forEach(fader => {
+        appearOnScroll.observe(fader);
+    });
+
 });

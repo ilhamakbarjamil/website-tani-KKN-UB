@@ -24,50 +24,402 @@ $produk = ambil_semua_produk($koneksi);
             --light: #f8f9fa;
             --dark: #343a40;
             --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
             --transition: all 0.3s ease;
+            --border-radius: 15px;
         }
-        body { font-family: 'Open Sans', sans-serif; background-color: var(--light); }
-        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--dark); }
-        .navbar { background-color: white; box-shadow: var(--shadow); padding: 0.75rem 0; }
-        .navbar .navbar-brand, .navbar .nav-link { color: var(--primary-dark) !important; }
-        .navbar .nav-link:hover, .navbar .nav-link.active { color: var(--primary) !important; background-color: rgba(46, 125, 50, 0.1); }
-        .navbar-brand { font-weight: 700; font-size: 1.5rem; display: flex; align-items: center; }
-        .navbar-brand i { margin-right: 10px; font-size: 1.8rem; color: var(--primary); }
-        .nav-link { font-weight: 500; margin: 0 8px; padding: 8px 15px !important; border-radius: 50px; transition: var(--transition); }
-        .page-header { background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80') center center/cover no-repeat; padding: 8rem 0 4rem 0; color: white; text-align: center; }
-        .page-header h1 { color: white; font-size: 3rem; font-weight: 700; }
-        .page-header p { font-size: 1.1rem; opacity: 0.9; }
-        .products-section { padding: 80px 0; }
-        .product-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: var(--shadow); transition: var(--transition); height: 100%; display: flex; flex-direction: column; }
-        .product-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); }
-        .product-img-wrapper { position: relative; height: 220px; }
-        .product-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
-        .product-card:hover .product-img { transform: scale(1.05); }
-        .product-badge { position: absolute; top: 15px; left: 15px; color: white; padding: 5px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: 500; }
-        .product-card-body { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
-        .product-title { font-size: 1.2rem; color: var(--primary-dark); margin-bottom: 10px; }
-        .product-desc { font-size: 0.95rem; color: #6c757d; margin-bottom: 15px; flex-grow: 1; }
-        .product-price { font-size: 1.3rem; font-weight: 700; color: var(--secondary); margin-bottom: 15px; }
-        .product-card .btn { background-color: var(--primary); border-color: var(--primary); color: white; font-weight: 500; transition: var(--transition); }
-        .product-card .btn:hover { background-color: var(--primary-dark); border-color: var(--primary-dark); transform: scale(1.05); }
-        /* Footer styles */
-        .footer { background: var(--primary-dark); color: white; padding: 70px 0 20px; }
-        .footer-logo { font-size: 1.8rem; font-weight: 700; display: flex; align-items: center; margin-bottom: 20px; }
-        .footer-logo i { margin-right: 10px; }
-        .footer-title { font-size: 1.3rem; margin-bottom: 20px; position: relative; padding-bottom: 10px; }
-        .footer-title::after { content: ''; position: absolute; bottom: 0; left: 0; width: 50px; height: 3px; background-color: var(--secondary); }
-        .footer-links { list-style: none; padding-left: 0; } .footer-links li { margin-bottom: 10px; }
-        .footer-links a { color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); display: flex; align-items: center; }
-        .footer-links a:hover { color: white; transform: translateX(5px); }
-        .copyright { text-align: center; padding-top: 30px; margin-top: 50px; border-top: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body { 
+            font-family: 'Open Sans', sans-serif; 
+            background-color: var(--light);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 { 
+            font-family: 'Poppins', sans-serif; 
+            font-weight: 600; 
+            color: var(--dark); 
+        }
+
+        /* === NAVBAR RESPONSIF === */
+        .navbar { 
+            background-color: white; 
+            box-shadow: var(--shadow); 
+            padding: 0.75rem 0; 
+        }
+
+        .navbar .navbar-brand, .navbar .nav-link { 
+            color: var(--primary-dark) !important; 
+        }
+
+        .navbar .nav-link:hover, .navbar .nav-link.active { 
+            color: var(--primary) !important; 
+            background-color: rgba(46, 125, 50, 0.1);
+            border-radius: 25px;
+        }
+
+        .navbar-brand { 
+            font-weight: 700; 
+            font-size: 1.5rem; 
+            display: flex; 
+            align-items: center; 
+        }
+
+        .navbar-brand i { 
+            margin-right: 10px; 
+            font-size: 1.8rem; 
+            color: var(--primary); 
+        }
+
+        .nav-link { 
+            font-weight: 500; 
+            margin: 0 4px; 
+            padding: 8px 15px !important; 
+            border-radius: 25px; 
+            transition: var(--transition); 
+        }
+
+        /* === HEADER RESPONSIF === */
+        .page-header { 
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80') center center/cover no-repeat; 
+            padding: 6rem 0 4rem 0; 
+            color: white; 
+            text-align: center; 
+        }
+
+        .page-header h1 { 
+            color: white; 
+            font-size: 2.5rem; 
+            font-weight: 700; 
+            margin-bottom: 1rem;
+        }
+
+        .page-header p { 
+            font-size: 1.1rem; 
+            opacity: 0.9; 
+        }
+
+        /* === PRODUCTS SECTION === */
+        .products-section { 
+            padding: 60px 0; 
+        }
+
+        /* === PRODUCT CARD BARU === */
+        .product-card { 
+            background: white; 
+            border-radius: var(--border-radius); 
+            overflow: hidden; 
+            box-shadow: var(--shadow); 
+            transition: var(--transition); 
+            height: 100%; 
+            display: flex; 
+            flex-direction: column;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .product-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: var(--shadow-hover); 
+        }
+
+        .product-img-wrapper {
+            position: relative;
+            height: 200px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            overflow: hidden;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover .product-img { 
+            transform: scale(1.1); 
+        }
+
+        .product-badge { 
+            position: absolute; 
+            top: 12px; 
+            right: 12px; 
+            color: white; 
+            padding: 6px 12px; 
+            border-radius: 20px; 
+            font-size: 0.75rem; 
+            font-weight: 600; 
+            text-transform: uppercase;
+            backdrop-filter: blur(10px);
+        }
+
+        .product-card-body { 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            flex-grow: 1; 
+        }
+
+        .product-title { 
+            font-size: 1.1rem; 
+            color: var(--primary-dark); 
+            margin-bottom: 8px; 
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .product-desc {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-price { 
+            font-size: 1.25rem; 
+            font-weight: 700; 
+            color: var(--secondary); 
+            margin-bottom: 15px; 
+        }
+
+        .product-card .btn { 
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border: none;
+            color: white; 
+            font-weight: 500; 
+            transition: var(--transition);
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
+
+        .product-card .btn:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.4);
+        }
+
+        .product-card .btn:disabled {
+            background: #6c757d;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* === PLACEHOLDER UNTUK PRODUK TANPA GAMBAR === */
+        .product-placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+        }
+
+        .product-placeholder i {
+            font-size: 3rem;
+            color: #adb5bd;
+        }
+
+        /* === EMPTY STATE === */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .empty-state h4 {
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+        }
+
+        .empty-state p {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+
+        /* === FOOTER === */
+        .footer { 
+            background: var(--primary-dark); 
+            color: white; 
+            padding: 70px 0 20px; 
+        }
+
+        .footer-logo { 
+            font-size: 1.8rem; 
+            font-weight: 700; 
+            display: flex; 
+            align-items: center; 
+            margin-bottom: 20px; 
+        }
+
+        .footer-logo i { 
+            margin-right: 10px; 
+        }
+
+        .footer-title { 
+            font-size: 1.3rem; 
+            margin-bottom: 20px; 
+            position: relative; 
+            padding-bottom: 10px; 
+        }
+
+        .footer-title::after { 
+            content: ''; 
+            position: absolute; 
+            bottom: 0; 
+            left: 0; 
+            width: 50px; 
+            height: 3px; 
+            background-color: var(--secondary); 
+        }
+
+        .footer-links { 
+            list-style: none; 
+            padding-left: 0; 
+        } 
+
+        .footer-links li { 
+            margin-bottom: 10px; 
+        }
+
+        .footer-links a { 
+            color: rgba(255, 255, 255, 0.8); 
+            text-decoration: none; 
+            transition: var(--transition); 
+            display: flex; 
+            align-items: center; 
+        }
+
+        .footer-links a:hover { 
+            color: white; 
+            transform: translateX(5px); 
+        }
+
+        .copyright { 
+            text-align: center; 
+            padding-top: 30px; 
+            margin-top: 50px; 
+            border-top: 1px solid rgba(255, 255, 255, 0.1); 
+            color: rgba(255, 255, 255, 0.7); 
+            font-size: 0.9rem; 
+        }
+
+        /* === RESPONSIVE BREAKPOINTS === */
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 4rem 0 3rem 0;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .page-header p {
+                font-size: 1rem;
+            }
+
+            .products-section {
+                padding: 40px 0;
+            }
+
+            .product-card-body {
+                padding: 15px;
+            }
+
+            .product-title {
+                font-size: 1rem;
+            }
+
+            .product-desc {
+                font-size: 0.85rem;
+            }
+
+            .product-price {
+                font-size: 1.1rem;
+            }
+
+            .navbar-brand {
+                font-size: 1.3rem;
+            }
+
+            .navbar-brand i {
+                font-size: 1.5rem;
+            }
+
+            .nav-link {
+                margin: 2px 0;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .product-img-wrapper {
+                height: 180px;
+            }
+
+            .product-card-body {
+                padding: 12px;
+            }
+
+            .product-title {
+                font-size: 0.95rem;
+            }
+
+            .product-desc {
+                font-size: 0.8rem;
+                -webkit-line-clamp: 2;
+            }
+
+            .product-price {
+                font-size: 1rem;
+            }
+
+            .product-card .btn {
+                font-size: 0.8rem;
+                padding: 8px 16px;
+            }
+        }
+
+        /* === LOADING ANIMATION === */
+        .loading-placeholder {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- Navbar (Tidak berubah) -->
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="index.php"><i class="fas fa-tractor"></i>Petani Maju</a>
+            <a class="navbar-brand" href="index.php">
+                <i class="fas fa-tractor"></i>Petani Maju
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -84,7 +436,7 @@ $produk = ambil_semua_produk($koneksi);
         </div>
     </nav>
 
-    <!-- Page Header (Tidak berubah) -->
+    <!-- Page Header -->
     <header class="page-header">
         <div class="container">
             <h1>Produk Unggulan Kami</h1>
@@ -96,53 +448,49 @@ $produk = ambil_semua_produk($koneksi);
     <section class="products-section">
         <div class="container">
             <?php if (empty($produk)): ?>
-                <div class="alert alert-info text-center">
+                <div class="empty-state">
+                    <i class="fas fa-seedling"></i>
                     <h4>Belum Ada Produk</h4>
-                    <p>Saat ini belum ada produk yang tersedia. Silakan cek kembali nanti.</p>
+                    <p>Saat ini belum ada produk yang tersedia. Silakan cek kembali nanti atau hubungi kami untuk informasi lebih lanjut.</p>
                 </div>
             <?php else: ?>
-                <div class="row">
+                <div class="row g-4">
                     <?php foreach($produk as $item): ?>
-                        <div class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex align-items-stretch">
+                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
                             <div class="product-card">
                                 <div class="product-img-wrapper">
-                                    
-                                    <!-- MODIFIKASI: Menampilkan gambar dari folder 'uploads/produk/' -->
                                     <?php if (!empty($item['gambar']) && file_exists('uploads/produk/' . $item['gambar'])): ?>
-                                        <img src="uploads/produk/<?= htmlspecialchars($item['gambar']) ?>" class="product-img" alt="<?= htmlspecialchars($item['nama_produk']) ?>">
+                                        <img src="uploads/produk/<?= htmlspecialchars($item['gambar']) ?>" 
+                                             class="product-img" 
+                                             alt="<?= htmlspecialchars($item['nama_produk']) ?>"
+                                             loading="lazy">
                                     <?php else: ?>
-                                        <!-- Placeholder jika gambar tidak ada -->
-                                        <div class="d-flex justify-content-center align-items-center bg-light h-100">
-                                            <i class="fas fa-leaf fa-4x text-muted"></i>
+                                        <div class="product-placeholder">
+                                            <i class="fas fa-leaf"></i>
                                         </div>
                                     <?php endif; ?>
-
-                                    <!-- MODIFIKASI: Badge dinamis berdasarkan stok -->
+                                    
                                     <div class="product-badge <?= ($item['stok'] > 0) ? 'bg-success' : 'bg-danger' ?>">
-                                        <?= ($item['stok'] > 0) ? 'Stok: ' . $item['stok'] : 'Stok Habis' ?>
+                                        <?= ($item['stok'] > 0) ? 'Stok: ' . $item['stok'] : 'Habis' ?>
                                     </div>
                                 </div>
+                                
                                 <div class="product-card-body">
-                                    <!-- MODIFIKASI: Menampilkan nama produk dari database -->
                                     <h5 class="product-title"><?= htmlspecialchars($item['nama_produk']) ?></h5>
-                                    
-                                    <!-- MODIFIKASI: Menampilkan deskripsi dari database -->
                                     <p class="product-desc"><?= htmlspecialchars($item['deskripsi']) ?></p>
-                                    
-                                    <!-- MODIFIKASI: Format harga dari integer ke Rupiah -->
                                     <div class="product-price">Rp <?= number_format($item['harga'], 0, ',', '.') ?></div>
                                     
-                                    <!-- MODIFIKASI: Logika tombol berdasarkan stok -->
                                     <?php if($item['stok'] > 0): ?>
-    <a href="https://wa.me/6281234567890?text=Halo%20saya%20ingin%20memesan%20produk%20<?= urlencode($item['nama_produk']) ?>%20dengan%20ID%20<?= $item['id_produk'] ?>" target="_blank" class="btn btn-primary mt-auto w-100">
-    <i class="fab fa-whatsapp me-2"></i>Pesan Sekarang
-</a>
-
-<?php else: ?>
-    <button class="btn btn-secondary mt-auto w-100" disabled>
-        <i class="fas fa-times-circle me-2"></i>Stok Habis
-    </button>
-<?php endif; ?>
+                                        <a href="https://wa.me/6281234567890?text=Halo%20saya%20ingin%20memesan%20produk%20<?= urlencode($item['nama_produk']) ?>%20dengan%20ID%20<?= $item['id_produk'] ?>" 
+                                           target="_blank" 
+                                           class="btn btn-primary mt-auto w-100">
+                                            <i class="fab fa-whatsapp me-2"></i>Pesan Sekarang
+                                        </a>
+                                    <?php else: ?>
+                                        <button class="btn btn-secondary mt-auto w-100" disabled>
+                                            <i class="fas fa-times-circle me-2"></i>Stok Habis
+                                        </button>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -152,12 +500,14 @@ $produk = ambil_semua_produk($koneksi);
         </div>
     </section>
 
-    <!-- Footer (Tidak berubah) -->
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 mb-5 mb-lg-0">
-                    <div class="footer-logo"><i class="fas fa-tractor"></i>Petani Maju</div>
+                    <div class="footer-logo">
+                        <i class="fas fa-tractor"></i>Petani Maju
+                    </div>
                     <p>Meningkatkan kesejahteraan petani melalui teknologi dan inovasi pertanian modern untuk Indonesia yang lebih maju.</p>
                 </div>
                 <div class="col-lg-4 mb-5 mb-lg-0">
