@@ -1,5 +1,5 @@
 <?php
-// // Fungsi untuk upload gambar
+// Fungsi untuk upload gambar
 // function upload_gambar($file, $target_dir) {
 //     $gambar = '';
     
