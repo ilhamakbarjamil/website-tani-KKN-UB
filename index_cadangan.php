@@ -302,178 +302,315 @@ $nomor_wa = "6281234567890"; // Ganti dengan nomor WhatsApp KWT Wonomulyo
         }
         /* === END HERO SECTION === */
 
-        /* Features Section */
-        .features-section {
-            padding: 80px 0;
-            position: relative;
-            z-index: 5; /* Ensure it is above the hero wave */
-            background-color: var(--light);
-        }
+        /* === History Section === */
+.history-section {
+    padding: 80px 0;
+    background-color: #f8f9fa; /* Warna latar belakang lembut untuk membedakan section */
+    /* Jika Anda menggunakan variabel CSS, ganti dengan: background-color: var(--light); */
+}
 
-        .section-title {
-            position: relative;
-            padding-bottom: 20px;
-            margin-bottom: 50px;
-            text-align: center;
-            color: var(--primary-dark);
-        }
+.history-section .section-title {
+    margin-bottom: 0;
+}
 
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            border-radius: 2px;
-        }
+/* Penyesuaian untuk gambar di mobile */
+.history-image {
+    max-width: 400px; /* Batasi lebar maks gambar agar tidak terlalu besar di desktop */
+    margin: 0 auto; /* Otomatis tengahkan gambar dalam kolomnya */
+    margin-bottom: 30px; /* Beri jarak bawah saat di tampilan mobile */
+}
 
-        .feature-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            height: 100%;
-            border: none;
-        }
+.history-content .history-subtitle {
+    font-weight: 700;
+    color: var(--primary-dark, #1a4314); /* Ganti dengan variabel warna Anda */
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
 
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-        }
+.history-content .history-text {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-light, #555);
+    margin-bottom: 20px;
+}
 
-        .feature-icon {
-            width: 90px;
-            height: 90px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            margin: 0 auto 25px;
-            transition: var(--transition);
-        }
+.history-content .history-quote {
+    border-left: 4px solid var(--primary, #2e7d32); /* Ganti dengan variabel warna Anda */
+    padding-left: 20px;
+    margin-top: 25px;
+    font-style: italic;
+    color: #444;
+}
 
-        .feature-card:hover .feature-icon {
-            transform: scale(1.1) rotate(15deg);
-            background: linear-gradient(135deg, var(--secondary), #ffb74d);
-        }
+.history-content .history-quote i {
+    color: var(--primary-light, #60ad5e);
+    margin-right: 8px;
+}
 
-        .feature-title {
-            font-size: 1.4rem;
-            margin-bottom: 15px;
-        }
 
-        /* === Excellence Section (Why Choose Us) - REVISED DESIGN === */
-        .excellence-section {
-            padding: 100px 0;
-            background-color: #ffffff;
-            overflow: hidden; 
-        }
+/* --- Penyesuaian Responsif untuk History Section --- */
 
-        .excellence-image-wrapper {
-            position: relative;
-            padding: 20px; 
-        }
+/* Untuk Tampilan Desktop (Layar besar) */
+@media (min-width: 992px) {
+    .history-section {
+        padding: 100px 0;
+    }
+    
+    /* Hilangkan margin bawah gambar karena sudah berdampingan */
+    .history-image {
+        margin-bottom: 0;
+    }
 
-        .image-background-shape {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 85%;
-            height: 85%;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            border-radius: 1rem;
-            z-index: 1;
-            transform: rotate(-5deg);
-            transition: var(--transition);
-        }
+    /* Konten di desktop rata kiri */
+    .history-content {
+        text-align: left;
+    }
+}
 
-        .excellence-image-wrapper:hover .image-background-shape {
-            transform: rotate(0deg) scale(1.05);
-        }
+/* Untuk Tampilan Mobile (Otomatis dari Bootstrap) */
+/* Pada layar di bawah 992px (breakpoint 'lg'), kolom gambar dan teks akan otomatis tersusun vertikal.
+   Kelas .text-center pada kolom gambar dan .g-5 pada .row sudah menangani perataan dan jaraknya. 
+   CSS di atas telah dirancang secara mobile-first, jadi tidak perlu media query khusus untuk mobile. */
 
-        .excellence-image-wrapper img {
-            position: relative;
-            z-index: 2;
-            object-fit: cover;
-            width: 100%;
-            height: 100%;
-            max-height: 500px;
-        }
-        .pre-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--secondary);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            display: block;
-            margin-bottom: 10px;
-        }
+        /* === Activities Section (New Design) === */
+.activities-section {
+    padding: 80px 0;
+    background-color: #ffffff; /* Latar putih untuk kontras */
+}
 
-        .excellence-content .section-title {
-            text-align: left;
-            margin-bottom: 20px;
-        }
+.activity-card {
+    background-color: #fff;
+    border: 1px solid var(--border, #e0e0e0); /* Gunakan variabel jika ada, jika tidak pakai #e0e0e0 */
+    border-radius: 1rem; /* Sudut lebih membulat */
+    padding: 40px 30px;
+    text-align: center;
+    height: 100%; /* Membuat semua card dalam satu baris sama tinggi */
+    transition: var(--transition, 0.3s ease);
+    position: relative;
+    overflow: hidden;
+}
 
-        .excellence-content .section-title::after {
-            left: 0;
-            transform: none;
-        }
+.activity-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary, #2e7d32);
+}
 
-        .excellence-content .lead {
-            font-size: 1.1rem;
-        }
-        .excellence-item {
-            background-color: var(--light);
-            padding: 20px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            transition: var(--transition);
-        }
+.activity-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 25px auto; /* Otomatis ke tengah dan beri jarak bawah */
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border-radius: 50%; /* Membuat ikon berada dalam lingkaran */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 2.5rem; /* Ukuran ikon lebih besar */
+    transition: var(--transition, 0.3s ease);
+}
 
-        .excellence-item:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 25px rgba(46, 125, 50, 0.15);
-            border-color: var(--primary-light);
-        }
+.activity-card:hover .activity-icon {
+    background: var(--secondary, #ff8f00); /* Ganti warna saat hover */
+    transform: rotate(15deg) scale(1.1);
+}
 
-        .excellence-item .icon-wrapper {
-            width: 60px;
-            height: 60px;
-            background-color: var(--primary);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 20px;
-            color: white;
-            font-size: 1.6rem;
-            transition: var(--transition);
-        }
+.activity-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-dark, #1a4314);
+    margin-bottom: 15px;
+}
 
-        .excellence-item:hover .icon-wrapper {
-            background: var(--secondary);
-            transform: rotate(10deg);
-        }
+.activity-card p {
+    color: var(--text-light, #555);
+    line-height: 1.6;
+    margin-bottom: 0;
+}
 
-        .excellence-item .item-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary-dark);
-            margin-bottom: 5px;
-        }
+/* Penyesuaian responsif sudah ditangani oleh kelas Bootstrap, 
+   namun kita pastikan card selalu sama tinggi di baris yang sama. */
+.activities-section .row {
+    display: flex;
+    flex-wrap: wrap;
+}
 
-        .excellence-item .item-text {
-            color: var(--text-light);
-            line-height: 1.6;
-            margin-bottom: 0;
-        }
+.activities-section .col-lg-4,
+.activities-section .col-md-6 {
+    display: flex;
+    flex-direction: column;
+}
+
+        /* === Excellence Section (Why Choose Us) - REVISED & RESPONSIVE DESIGN === */
+
+/* --- Base Styles (Mobile First) --- */
+.excellence-section {
+    padding: 60px 0; /* Padding lebih kecil untuk mobile */
+    background-color: #ffffff;
+    overflow: hidden; 
+}
+
+.excellence-image-wrapper {
+    position: relative;
+    padding: 15px; /* Padding lebih kecil untuk mobile */
+}
+
+.image-background-shape {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 85%;
+    height: 85%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border-radius: 1rem;
+    z-index: 1;
+    transform: rotate(-5deg);
+    transition: var(--transition);
+}
+
+.excellence-image-wrapper:hover .image-background-shape {
+    transform: rotate(0deg) scale(1.05);
+}
+
+.excellence-image-wrapper img {
+    position: relative;
+    z-index: 2;
+    object-fit: cover;
+    width: 100%;
+    /* Menghapus max-height agar gambar proporsional di mobile */
+}
+
+.pre-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--secondary);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Konten di mobile akan berada di bawah gambar, jadi kita beri margin atas */
+.excellence-content {
+    margin-top: 40px; 
+}
+
+.excellence-content .section-title {
+    /* Judul di tengah pada tampilan mobile */
+    text-align: center; 
+    margin-bottom: 20px;
+}
+
+.excellence-content .section-title::after {
+    /* Posisikan garis bawah di tengah */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.excellence-content .lead {
+    font-size: 1.05rem; /* Sedikit lebih kecil di mobile */
+    text-align: center; /* Teks lead juga di tengah */
+}
+
+.excellence-item {
+    background-color: var(--light);
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: var(--transition);
+}
+
+.excellence-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(46, 125, 50, 0.15);
+    border-color: var(--primary-light);
+}
+
+.excellence-item .icon-wrapper {
+    width: 50px; /* Sedikit lebih kecil di mobile */
+    height: 50px;
+    background-color: var(--primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    color: white;
+    font-size: 1.4rem;
+    transition: var(--transition);
+}
+
+.excellence-item:hover .icon-wrapper {
+    background: var(--secondary);
+    transform: rotate(10deg);
+}
+
+.excellence-item .item-title {
+    font-size: 1.1rem; /* Sedikit lebih kecil di mobile */
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 5px;
+}
+
+.excellence-item .item-text {
+    color: var(--text-light);
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* Tombol di tengah pada mobile */
+.excellence-section .btn {
+    display: block;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* --- Desktop Styles (Layar Besar) --- */
+@media (min-width: 992px) {
+    .excellence-section {
+        padding: 100px 0; /* Kembalikan padding besar untuk desktop */
+    }
+
+    /* Hilangkan margin atas karena layout sudah side-by-side */
+    .excellence-content {
+        margin-top: 0; 
+    }
+
+    .excellence-content .section-title {
+        /* Kembalikan perataan ke kiri untuk desktop */
+        text-align: left; 
+    }
+
+    .excellence-content .section-title::after {
+        /* Kembalikan posisi garis bawah ke kiri */
+        left: 0;
+        transform: none;
+    }
+    
+    .excellence-content .lead {
+        text-align: left; /* Teks lead kembali ke kiri */
+        font-size: 1.1rem;
+    }
+
+    .excellence-item .icon-wrapper {
+        width: 60px; /* Kembalikan ukuran ikon untuk desktop */
+        height: 60px;
+        font-size: 1.6rem;
+    }
+
+    .excellence-item .item-title {
+        font-size: 1.2rem; /* Kembalikan ukuran font judul item */
+    }
+    
+    /* Tombol kembali ke kiri di desktop */
+    .excellence-section .btn {
+        display: inline-block;
+        width: auto;
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
         
             /* ============================================= */
 /*       STYLING UNTUK PRODUCTS SECTION          */
@@ -952,7 +1089,7 @@ $nomor_wa = "6281234567890"; // Ganti dengan nomor WhatsApp KWT Wonomulyo
                     <span class="hero-stat-label">Anggota Aktif</span>
                 </div>
                  <div class="hero-stat">
-                    <span class="hero-stat-number">10+</span>
+                    <span class="hero-stat-number">5+</span>
                     <span class="hero-stat-label">Jenis Produk Lokal</span>
                 </div>
                  <div class="hero-stat">
@@ -966,104 +1103,166 @@ $nomor_wa = "6281234567890"; // Ganti dengan nomor WhatsApp KWT Wonomulyo
         </div>
     </section>
 
-    <!-- MODIFIKASI: Section Layanan menjadi Kegiatan -->
-    <section id="kegiatan" class="features-section">
-        <div class="container">
-            <h2 class="section-title animated">Kegiatan Utama Kami</h2>
-            <div class="row">
-                <div class="col-md-4 mb-4 animated" style="animation-delay: 0.1s;">
-                    <div class="feature-card text-center p-4">
-                        <div class="feature-icon">
-                            <i class="fas fa-leaf"></i>
-                        </div>
-                        <h4 class="feature-title">Budidaya Organik</h4>
+    <!-- History Section -->
+<section id="sejarah" class="history-section">
+    <div class="container">
+        <!-- Judul Section -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8 text-center">
+                <span class="pre-title">AWAL MULA KAMI</span>
+                <h2 class="section-title">Dari Pelatihan Hingga Kemandirian</h2>
+            </div>
+        </div>
+
+        <!-- Konten Sejarah -->
+        <div class="row align-items-center g-5">
+            <!-- Kolom Gambar -->
+            <div class="col-lg-5 text-center">
+                <!-- Ganti src dengan foto asli Anda. Foto tentang pengolahan singkong/kegiatan kelompok akan sangat bagus. -->
+                <img src="uploads/logo.png" 
+                     class="img-fluid rounded-3 shadow-lg history-image" 
+                     alt="Anggota KWT Mekar Sari sedang mengolah singkong">
+            </div>
+
+            <!-- Kolom Teks -->
+            <div class="col-lg-7">
+                <div class="history-content">
+                    <h3 class="history-subtitle">Terbentuk pada 4 Januari 2023</h3>
+                    <p class="history-text">
+                        KWT Mekar Sari, yang beranggotakan 10 orang, lahir dari gagasan setelah mengikuti pelatihan di BLK Wonojati. Kami memilih untuk fokus mengolah singkong yang melimpah di desa kami sebagai cara mengangkat potensi lokal. Dari bahan baku asli Wonomulyo ini, kami menciptakan beragam produk seperti keripik, samiler, stik, jemblem, dan getuk.
+                    </p>
+                    <!-- <p class="history-text">
+                        Kami memutuskan untuk fokus pada singkong. Kenapa? Karena singkong melimpah di desa kami. Ini adalah cara kami untuk mengangkat produk lokal dan memastikan bahan baku produk kami benar-benar asli dari tanah Wonomulyo. Dari singkong sederhana, kami ciptakan berbagai olahan lezat seperti keripik, samiler (emping singkong), stik, jemblem, hingga getuk.
+                    </p> -->
+                    <blockquote class="history-quote">
+                        <i class="fas fa-quote-left"></i>
+                        Setiap produk yang kami hasilkan adalah cerita tentang kerja keras, kebersamaan, dan cinta kami pada hasil bumi lokal.
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Activities Section (Revised) -->
+<section id="kegiatan" class="activities-section">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8 text-center animated" data-animation="fadeInUp">
+                <span class="pre-title">APA YANG KAMI LAKUKAN</span>
+                <h2 class="section-title">Kegiatan Utama Kami</h2>
+            </div>
+        </div>
+
+        <!-- Activity Cards -->
+        <div class="row g-4 justify-content-center">
+            <!-- Card 1: Budidaya Organik -->
+            <div class="col-lg-4 col-md-6 animated" data-animation="fadeInUp" style="animation-delay: 0.1s;">
+                <div class="activity-card">
+                    <div class="activity-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="activity-content">
+                        <h4 class="activity-title">Budidaya Organik</h4>
                         <p>Mengembangkan sayuran dan buah-buahan segar tanpa pestisida kimia, sehat untuk keluarga dan ramah lingkungan.</p>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4 animated" style="animation-delay: 0.2s;">
-                    <div class="feature-card text-center p-4">
-                        <div class="feature-icon">
-                            <i class="fas fa-box-open"></i>
-                        </div>
-                        <h4 class="feature-title">Pengolahan Produk</h4>
+            </div>
+
+            <!-- Card 2: Pengolahan Produk -->
+            <div class="col-lg-4 col-md-6 animated" data-animation="fadeInUp" style="animation-delay: 0.2s;">
+                <div class="activity-card">
+                    <div class="activity-icon">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                    <div class="activity-content">
+                        <h4 class="activity-title">Pengolahan Produk</h4>
                         <p>Menciptakan produk olahan bernilai tambah dari hasil panen, seperti keripik, jus, dan makanan tradisional.</p>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4 animated" style="animation-delay: 0.3s;">
-                    <div class="feature-card text-center p-4">
-                        <div class="feature-icon">
-                            <i class="fas-solid fa-store"></i>
-                        </div>
-                        <h4 class="feature-title">Pemasaran Bersama</h4>
+            </div>
+
+            <!-- Card 3: Pemasaran Bersama -->
+            <div class="col-lg-4 col-md-6 animated" data-animation="fadeInUp" style="animation-delay: 0.3s;">
+                <div class="activity-card">
+                    <div class="activity-icon">
+                        <!-- PERBAIKAN: Kelas Font Awesome yang benar adalah "fas fa-store" -->
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <div class="activity-content">
+                        <h4 class="activity-title">Pemasaran Bersama</h4>
                         <p>Menjual produk secara kolektif untuk menjangkau pasar yang lebih luas dan mendapatkan harga yang adil.</p>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Excellence Section -->
-    <section id="keunggulan" class="excellence-section">
-        <div class="container">
-            <div class="row align-items-center g-5">
-                <div class="col-lg-6 animated" style="animation-delay: 0.1s;">
-                    <div class="excellence-image-wrapper">
-                        <div class="image-background-shape"></div>
-                        <!-- MODIFIKASI: Gambar yang lebih relevan (wanita tani) -->
-                        <img src="uploads/logo.png" class="img-fluid rounded-3 shadow-lg" alt="Kelompok Wanita Tani sedang bekerja di kebun">
-                    </div>
+<section id="keunggulan" class="excellence-section">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <!-- Kolom Gambar -->
+            <div class="col-lg-6 animated" style="animation-delay: 0.1s;">
+                <div class="excellence-image-wrapper">
+                    <div class="image-background-shape"></div>
+                    <!-- MODIFIKASI: Menggunakan gambar placeholder yang relevan. Ganti dengan gambar Anda. -->
+                    <img src="uploads/logo.png" class="img-fluid rounded-3 shadow-lg" alt="Kelompok Wanita Tani sedang bekerja di kebun">
                 </div>
-                <div class="col-lg-6 animated" style="animation-delay: 0.2s;">
-                    <div class="excellence-content">
-                        <!-- MODIFIKASI: Narasi Keunggulan -->
-                        <span class="pre-title">SEMANGAT KAMI</span>
-                        <h2 class="section-title text-start">Kekuatan Gotong Royong dan Kearifan Lokal</h2>
-                        <p class="lead text-muted mb-4">
-                           Kami percaya bahwa dengan bekerja bersama, para wanita di Wonomulyo dapat mandiri secara ekonomi sambil menjaga kelestarian alam untuk generasi mendatang.
-                        </p>
-                        <div class="vstack gap-3">
-                            <div class="excellence-item">
-                                <div class="d-flex align-items-start">
-                                    <div class="icon-wrapper flex-shrink-0">
-                                        <i class="fas fa-seedling"></i>
-                                    </div>
-                                    <div>
-                                        <h5 class="item-title">Produk Segar & Sehat</h5>
-                                        <p class="item-text mb-0">Hasil panen langsung dari kebun kami, diolah dengan cara alami untuk menjaga kualitas terbaik.</p>
-                                    </div>
+            </div>
+            <!-- Kolom Konten -->
+            <div class="col-lg-6 animated" style="animation-delay: 0.2s;">
+                <div class="excellence-content">
+                    <span class="pre-title">SEMANGAT KAMI</span>
+                    <h2 class="section-title">Kekuatan Gotong Royong dan Kearifan Lokal</h2>
+                    <p class="lead text-muted mb-4">
+                       Kami percaya bahwa dengan bekerja bersama, para wanita di Wonomulyo dapat mandiri secara ekonomi sambil menjaga kelestarian alam untuk generasi mendatang.
+                    </p>
+                    <div class="vstack gap-3">
+                        <div class="excellence-item">
+                            <div class="d-flex align-items-start">
+                                <div class="icon-wrapper flex-shrink-0">
+                                    <i class="fas fa-seedling"></i>
                                 </div>
-                            </div>
-                            <div class="excellence-item">
-                                <div class="d-flex align-items-start">
-                                    <div class="icon-wrapper flex-shrink-0">
-                                        <i class="fas fa-hand-holding-heart"></i>
-                                    </div>
-                                    <div>
-                                        <h5 class="item-title">Proses Ramah Lingkungan</h5>
-                                        <p class="item-text mb-0">Menggunakan pupuk organik dan metode pertanian berkelanjutan yang menjaga kesuburan tanah.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="excellence-item">
-                               <div class="d-flex align-items-start">
-                                    <div class="icon-wrapper flex-shrink-0">
-                                        <i class="fas fa-users"></i>
-                                    </div>
-                                    <div>
-                                        <h5 class="item-title">Pemberdayaan Komunitas</h5>
-                                        <p class="item-text mb-0">Setiap pembelian produk mendukung langsung kemandirian ekonomi para wanita di desa kami.</p>
-                                    </div>
+                                <div>
+                                    <h5 class="item-title">Produk Segar & Sehat</h5>
+                                    <p class="item-text mb-0">Hasil panen langsung dari kebun kami, diolah dengan cara alami untuk menjaga kualitas terbaik.</p>
                                 </div>
                             </div>
                         </div>
-                        <a href="#kontak" class="btn btn-primary mt-4 py-2 px-4 fw-bold">
-                            Dukung Kami <i class="fas fa-arrow-right ms-2"></i>
-                        </a>
+                        <div class="excellence-item">
+                            <div class="d-flex align-items-start">
+                                <div class="icon-wrapper flex-shrink-0">
+                                    <i class="fas fa-hand-holding-heart"></i>
+                                </div>
+                                <div>
+                                    <h5 class="item-title">Proses Ramah Lingkungan</h5>
+                                    <p class="item-text mb-0">Menggunakan pupuk organik dan metode pertanian berkelanjutan yang menjaga kesuburan tanah.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="excellence-item">
+                           <div class="d-flex align-items-start">
+                                <div class="icon-wrapper flex-shrink-0">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div>
+                                    <h5 class="item-title">Pemberdayaan Komunitas</h5>
+                                    <p class="item-text mb-0">Setiap pembelian produk mendukung langsung kemandirian ekonomi para wanita di desa kami.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <a href="#kontak" class="btn btn-primary mt-4 py-2 px-4 fw-bold">
+                        Dukung Kami <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- ============================================= -->
 <!--          START: PRODUCTS SECTION              -->
