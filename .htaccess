@@ -1,0 +1,11 @@
+# Aktifkan Mesin Rewrite URL
+RewriteEngine On
+
+# Jangan rewrite jika request adalah untuk file atau direktori yang sudah ada
+# Ini penting agar file gambar, css, dan js tetap bisa diakses
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Arahkan semua permintaan lainnya ke index.php
+# Path yang diminta akan dikirim sebagai parameter 'url'
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]

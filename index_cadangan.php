@@ -1,11 +1,8 @@
 <?php
-// Memuat file koneksi database dan fungsi-fungsi umum
 require_once 'includes/koneksi.php';
 require_once 'includes/functions.php';
 
-// --- PENGAMBILAN DATA ---
-
-// 1. Ambil 3 berita terbaru untuk ditampilkan di beranda
+// Ambil data berita dan produk
 $query_berita = "SELECT * FROM berita ORDER BY tanggal DESC LIMIT 3";
 $result_berita = mysqli_query($koneksi, $query_berita);
 $berita = [];
@@ -14,8 +11,6 @@ if ($result_berita) {
         $berita[] = $row;
     }
 }
-
-// 2. Ambil 4 produk unggulan (terbaru dan stok > 0) untuk beranda
 $query_produk = "SELECT * FROM produk WHERE stok > 0 ORDER BY created_at DESC LIMIT 4";
 $result_produk = mysqli_query($koneksi, $query_produk);
 $produk_unggulan = [];
@@ -24,1644 +19,747 @@ if ($result_produk) {
         $produk_unggulan[] = $row;
     }
 }
-
-// 3. Nomor WhatsApp untuk dihubungi (Ganti dengan nomor yang benar)
 $nomor_wa = "6282229820607";
-
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelompok Wanita Tani Wonomulyo</title>
-    <!-- Eksternal CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <!-- Internal CSS (Dengan Perbaikan Mobile Final) -->
-    <style>
-        :root {
-            --primary: #2e7d32;
-            --primary-dark: #1b5e20;
-            --primary-light: #4caf50;
-            --primary-soft: #e8f5e9;
-            --secondary: #ff9800;
-            --secondary-soft: #fff3e0;
-            --light: #f8f9fa;
-            --dark: #343a40;
-            --text: #333;
-            --text-light: #6c757d;
-            --border: #e0e0e0;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --transition: all 0.3s ease;
-        }
-
-        /* === Global & Reset === */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* PERBAIKAN: Mencegah scroll horizontal global */
-        html, body {
-            scroll-behavior: smooth;
-            overflow-x: hidden;
-            max-width: 100%;
-        }
-
-        body {
-            font-family: 'Open Sans', sans-serif;
-            color: var(--text);
-            background-color: var(--light);
-            line-height: 1.6;
-        }
-        
-        /* PERBAIKAN: Mencegah scroll horizontal pada container */
-        .container {
-            overflow-x: hidden;
-        }
-
-
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        .pre-title {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: var(--secondary);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .section-title {
-            position: relative;
-            margin-bottom: 50px;
-            text-align: center;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 70px;
-            height: 4px;
-            background: var(--primary);
-            border-radius: 2px;
-        }
-
-        /* === Navbar === */
-        .navbar {
-            background-color: transparent;
-            padding: 1rem 0;
-            transition: background-color 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease;
-        }
-
-        .navbar.scrolled {
-            background-color: rgba(255, 255, 255, 0.95);
-            box-shadow: var(--shadow);
-            padding: 0.75rem 0;
-            backdrop-filter: blur(10px);
-        }
-
-        .navbar.scrolled .navbar-brand,
-        .navbar.scrolled .nav-link {
-            color: var(--primary-dark) !important;
-        }
-
-        .navbar.scrolled .nav-link:hover,
-        .navbar.scrolled .nav-link.active {
-            color: var(--primary) !important;
-            background-color: rgba(46, 125, 50, 0.1);
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: white;
-            display: flex;
-            align-items: center;
-            transition: var(--transition);
-        }
-
-        .navbar-brand i {
-            margin-right: 10px;
-            font-size: 1.8rem;
-        }
-
-        .nav-link {
-            color: rgba(255, 255, 255, 0.85) !important;
-            font-weight: 500;
-            margin: 0 8px;
-            padding: 8px 15px !important;
-            border-radius: 50px;
-            transition: var(--transition);
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            color: white !important;
-            background-color: rgba(255, 255, 255, 0.15);
-        }
-
-        /* === Hero Section === */
-        .hero-section {
-            background: linear-gradient(135deg, rgba(27, 94, 32, 0.85) 0%, rgba(46, 125, 50, 0.75) 100%),
-                        url('https://images.unsplash.com/photo-1492496913980-501348b61469?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            padding-top: 80px;
-        }
-
-        .hero-section::after {
-            content: "";
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23f8f9fa" fill-opacity="1" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,261.3C672,256,768,224,864,197.3C960,171,1056,149,1152,160C1248,171,1344,213,1392,234.7L1440,256L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
-            background-size: cover;
-            background-position: bottom;
-            z-index: 2;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 3;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .hero-title {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-            line-height: 1.2;
-            animation: fadeInUp 1s ease-out;
-            color: white;
-        }
-
-        .hero-subtitle {
-            font-size: 1.3rem;
-            margin-bottom: 35px;
-            opacity: 0.95;
-            font-weight: 400;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            animation: fadeInUp 1s ease-out 0.2s both;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-            animation: fadeInUp 1s ease-out 0.4s both;
-        }
-
-        .btn-hero-primary {
-            background: var(--secondary);
-            color: var(--dark);
-            font-weight: 600;
-            padding: 14px 32px;
-            border-radius: 50px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            transition: var(--transition);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            border: none;
-            font-size: 1.1rem;
-        }
-
-        .btn-hero-primary:hover {
-            background: #ffb74d;
-            color: var(--dark);
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-whatsapp {
-            background-color: #25D366;
-            color: white;
-            font-weight: 600;
-            padding: 14px 32px;
-            border-radius: 50px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            transition: var(--transition);
-            box-shadow: var(--shadow);
-            border: none;
-            font-size: 1.1rem;
-        }
-
-        .btn-whatsapp:hover {
-            background-color: #128C7E;
-            color: white;
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .hero-stats {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 60px;
-            flex-wrap: wrap;
-            animation: fadeInUp 1s ease-out 0.6s both;
-        }
-
-        .hero-stat {
-            text-align: center;
-            color: white;
-        }
-
-        .hero-stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            display: block;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .hero-stat-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* === Scroll Indicator === */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 3;
-            animation: bounce 2s infinite;
-        }
-
-        .scroll-indicator a {
-            color: white;
-            font-size: 1.5rem;
-            text-decoration: none;
-            opacity: 0.8;
-            transition: var(--transition);
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-15px); }
-            60% { transform: translateY(-7px); }
-        }
-        
-        /* === History Section === */
-        .history-section {
-            padding: 80px 0;
-            background-color: var(--light);
-        }
-        
-        .history-image {
-            max-width: 400px;
-            margin: 0 auto 30px auto;
-        }
-
-        .history-content .history-subtitle {
-            font-weight: 700;
-            color: var(--primary-dark);
-            margin-bottom: 15px;
-            font-size: 1.5rem;
-        }
-
-        .history-content .history-text {
-            font-size: 1.05rem;
-            line-height: 1.7;
-            color: var(--text-light);
-            margin-bottom: 20px;
-        }
-
-        .history-content .history-quote {
-            border-left: 4px solid var(--primary);
-            padding-left: 20px;
-            margin-top: 25px;
-            font-style: italic;
-            color: #444;
-        }
-
-        .history-content .history-quote i {
-            color: var(--primary-light);
-            margin-right: 8px;
-        }
-        
-        /* === Activities Section === */
-        .activities-section {
-            padding: 80px 0;
-            background-color: #ffffff;
-        }
-        
-        .activity-card {
-            background-color: #fff;
-            border: 1px solid var(--border);
-            border-radius: 1rem;
-            padding: 40px 30px;
-            text-align: center;
-            height: 100%;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .activity-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-            border-color: var(--primary);
-        }
-
-        .activity-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 25px auto;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 2.5rem;
-            transition: var(--transition);
-        }
-
-        .activity-card:hover .activity-icon {
-            background: var(--secondary);
-            transform: rotate(15deg) scale(1.1);
-        }
-
-        .activity-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--primary-dark);
-            margin-bottom: 15px;
-        }
-
-        .activity-card p {
-            color: var(--text-light);
-            line-height: 1.6;
-            margin-bottom: 0;
-        }
-        
-        .activities-section .row {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .activities-section .col-lg-4,
-        .activities-section .col-md-6 {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        /* === Excellence Section === */
-        .excellence-section-revamped {
-            padding: 80px 0;
-            background-color: #ffffff;
-            overflow: hidden;
-        }
-        
-        .excellence-image-wrapper {
-            position: relative;
-            padding: 15px;
-            overflow: hidden;
-        }
-
-        .image-background-shape {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 90%;
-            height: 90%;
-            background: linear-gradient(135deg, var(--primary-light), var(--primary));
-            border-radius: 1.5rem;
-            z-index: 1;
-            transform: rotate(-6deg);
-            transition: var(--transition);
-        }
-
-        .excellence-image-wrapper:hover .image-background-shape {
-            transform: rotate(2deg) scale(1.03);
-        }
-
-        .excellence-image-wrapper img {
-            position: relative;
-            z-index: 2;
-            object-fit: cover;
-            width: 100%;
-        }
-        
-        .excellence-content .section-title {
-            text-align: left;
-            margin-bottom: 25px;
-        }
-        
-        .excellence-content .section-title::after {
-            left: 0;
-            transform: none;
-        }
-        
-        .excellence-content .lead {
-            font-size: 1.1rem;
-            padding-bottom: 20px;
-        }
-        
-        .feature-card {
-            background-color: var(--light);
-            border: 1px solid var(--border);
-            border-radius: 1rem;
-            padding: 30px;
-            text-align: center;
-            height: 100%;
-            transition: var(--transition);
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(46, 125, 50, 0.15);
-            border-color: var(--primary);
-        }
-        
-        .feature-icon {
-            width: 65px;
-            height: 65px;
-            margin-bottom: 20px;
-            background-color: var(--primary);
-            color: #fff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            transition: var(--transition);
-        }
-
-        .feature-card:hover .feature-icon {
-            background-color: var(--secondary);
-            transform: scale(1.1) rotate(-15deg);
-        }
-
-        .feature-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary-dark);
-            margin-bottom: 8px;
-        }
-
-        .feature-text {
-            color: var(--text-light);
-            line-height: 1.5;
-            margin-bottom: 0;
-        }
-        
-        .action-card {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            justify-content: center;
-            color: #fff;
-            position: relative;
-        }
-
-        .action-card:hover {
-            box-shadow: 0 15px 30px rgba(46, 125, 50, 0.3);
-        }
-
-        .action-arrow {
-            font-size: 1.5rem;
-            margin-top: 10px;
-            transition: var(--transition);
-        }
-
-        .action-card:hover .action-arrow {
-            transform: translateX(8px);
-        }
-
-        /* === Products Section === */
-        .products-section {
-            padding: 80px 0;
-            background-color: var(--light);
-        }
-
-        .products-section .products-scroll-wrapper .row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr); 
-            gap: 1.5rem;
-        }
-
-        .col-product-item {
-            display: flex;
-        }
-
-        .product-card {
-            background: #ffffff;
-            border-radius: 12px;
-            border: 1px solid #e9ecef;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            transition: var(--transition);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-        }
-
-        .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .product-img-wrapper {
-            position: relative;
-            height: 220px;
-            overflow: hidden;
-        }
-
-        .product-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.4s ease;
-        }
-
-        .product-card:hover .product-img {
-            transform: scale(1.1);
-        }
-
-        .product-img-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #e9ecef;
-            color: #adb5bd;
-        }
-
-        .product-badge {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: var(--primary);
-            color: white;
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            z-index: 2;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .product-card-body {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .product-brand {
-            font-size: 0.8rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #9fa8b0;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        .product-title {
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: var(--primary-dark);
-            margin-bottom: 10px;
-            line-height: 1.4;
-            margin-top: 0;
-        }
-
-        .product-desc {
-            font-size: 0.9rem;
-            color: #6c757d;
-            margin-bottom: 20px;
-            flex-grow: 1;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            min-height: 54px;
-        }
-
-        .product-footer {
-            margin-top: auto;
-            padding-top: 15px;
-            border-top: 1px solid #f1f1f1;
-        }
-
-        .product-price {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--secondary);
-            margin-bottom: 15px;
-        }
-        
-        /* === News Section === */
-        .news-section {
-            background-color: #f0f7f0;
-            padding: 80px 0;
-        }
-
-        .news-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            height: 100%;
-            border: none;
-            position: relative;
-        }
-
-        .news-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .news-img {
-            height: 220px;
-            width: 100%;
-            object-fit: cover;
-            transition: var(--transition);
-        }
-
-        .news-card:hover .news-img {
-            transform: scale(1.05);
-        }
-
-        .news-date {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: var(--primary);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        .news-body {
-            padding: 25px;
-        }
-
-        .news-title {
-            font-size: 1.3rem;
-            margin-bottom: 12px;
-            color: var(--primary-dark);
-        }
-
-        .news-text {
-            color: var(--text-light);
-            margin-bottom: 20px;
-        }
-
-        .read-more {
-            color: var(--primary);
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            transition: var(--transition);
-        }
-
-        .read-more:hover {
-            color: var(--primary-dark);
-        }
-
-        .read-more i {
-            margin-left: 5px;
-            transition: var(--transition);
-        }
-
-        .read-more:hover i {
-            transform: translateX(3px);
-        }
-
-        /* === Contact Section === */
-        .contact-section-revamped {
-            padding: 80px 0;
-            background-color: var(--light);
-        }
-
-        .contact-panel-wrapper {
-            border-radius: 1.5rem;
-            overflow: hidden;
-            background-color: #ffffff;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
-        }
-
-        .contact-info-panel {
-            padding: 50px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .contact-info-panel .panel-title {
-            font-weight: 700;
-            color: var(--primary-dark);
-            margin-bottom: 30px;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 25px;
-        }
-
-        .contact-item .icon-box {
-            flex-shrink: 0;
-            width: 45px;
-            height: 45px;
-            background-color: var(--primary-soft);
-            color: var(--primary);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            margin-right: 20px;
-        }
-
-        .contact-item .text-box strong {
-            font-weight: 600;
-            color: var(--primary-dark);
-            display: block;
-            margin-bottom: 2px;
-        }
-
-        .contact-item .text-box p {
-            margin-bottom: 0;
-            color: var(--text-light);
-            line-height: 1.6;
-        }
-
-        .contact-item .text-box a {
-            color: var(--primary);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .contact-item .text-box a:hover {
-            color: var(--secondary);
-            text-decoration: underline;
-        }
-        
-        .panel-subtitle {
-            font-weight: 600;
-            color: var(--primary-dark);
-            margin-bottom: 15px;
-        }
-        
-        .op-hours li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            color: var(--text-light);
-        }
-
-        .badge.bg-primary-soft {
-            background-color: var(--primary-soft) !important;
-            color: var(--primary-dark) !important;
-            font-weight: 600;
-        }
-
-        .badge.bg-secondary-soft {
-            background-color: var(--secondary-soft) !important;
-            color: #a0522d !important;
-            font-weight: 600;
-        }
-        
-        .map-wrapper {
-            height: 100%;
-            min-height: 450px;
-        }
-
-        .map-wrapper iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-
-        /* === Footer Section === */
-.footer-revamped {
-    background-color: var(--primary-dark);
-    color: rgba(255, 255, 255, 0.7);
-    padding: 80px 0 0 0;
-}
-
-.footer-widget {
-    margin-bottom: 40px;
-}
-
-.footer-logo {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #fff;
-    display: inline-flex;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.footer-logo i {
-    color: var(--secondary);
-    margin-right: 12px;
-}
-
-.footer-about {
-    line-height: 1.8;
-    margin-bottom: 25px;
-}
-
-.social-links {
-    display: flex;
-    gap: 12px;
-}
-
-.social-links a {
-    width: 42px;
-    height: 42px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    text-decoration: none;
-    transition: var(--transition);
-}
-
-.social-links a:hover {
-    background-color: var(--secondary);
-    border-color: var(--secondary);
-    transform: translateY(-5px);
-}
-
-.footer-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #fff;
-    margin-bottom: 25px;
-    letter-spacing: 0.5px;
-}
-
-.footer-links,
-.footer-contact-info {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.footer-links li {
-    margin-bottom: 12px;
-}
-
-.footer-links a {
-    color: rgba(255, 255, 255, 0.7);
-    text-decoration: none;
-    transition: var(--transition);
-    position: relative;
-    padding-left: 20px;
-}
-
-.footer-links a::before {
-    content: '\f054';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    font-size: 0.7rem;
-    position: absolute;
-    left: 0;
-    top: 5px;
-    opacity: 0;
-    color: var(--secondary);
-    transition: var(--transition);
-}
-
-.footer-links a:hover {
-    color: #fff;
-    transform: translateX(5px);
-}
-
-.footer-links a:hover::before {
-    opacity: 1;
-}
-
-.footer-contact-info li {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 18px;
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.footer-contact-info i {
-    font-size: 1rem;
-    color: var(--secondary);
-    margin-right: 15px;
-    margin-top: 5px;
-    width: 20px;
-    text-align: center;
-}
-
-.footer-contact-info a {
-    color: rgba(255, 255, 255, 0.7);
-    text-decoration: none;
-    transition: var(--transition);
-}
-
-.footer-contact-info a:hover {
-    color: #fff;
-    text-decoration: underline;
-}
-
-.footer-bottom {
-    padding: 30px 0;
-    margin-top: 40px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    text-align: center;
-}
-
-.copyright-text {
-    margin: 0;
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.5);
-}
-
-
-/* === PERBAIKAN UNTUK TAMPILAN MOBILE === */
-@media (max-width: 767.98px) {
-    .footer-revamped {
-        /* Mengurangi padding atas di mobile */
-        padding-top: 50px;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kelompok Wanita Tani Wonomulyo</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+    :root {
+        --primary: #2e7d32;
+        --primary-dark: #1b5e20;
+        --secondary: #EE4D2D; /* Vibrant Orange for accents */
+        --light: #f7f9f7; /* Lighter background */
+        --white: #ffffff;
+        --dark: #343a40;
+        --text: #454545;
+        --text-light: #6c757d;
+        --border-color: #e9ecef;
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease-in-out;
+        --border-radius: 8px;
     }
+    html {
+        scroll-behavior: smooth;
+        overflow-x: hidden;
+        max-width: 100%;
+    }
+    body {
+        font-family: 'Open Sans', sans-serif;
+        color: var(--text);
+        background-color: var(--white);
+        line-height: 1.7;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        color: var(--dark);
+    }
+    .container { overflow-x: hidden; }
 
-    .footer-widget {
-        /* Mengatur semua teks di widget menjadi di tengah */
+    .pre-title {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--primary);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+    .section-title {
+        position: relative;
+        margin-bottom: 50px;
         text-align: center;
+        font-weight: 700;
+    }
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background: var(--secondary);
+        border-radius: 2px;
+    }
+
+    .navbar {
+        background-color: transparent;
+        padding: 1rem 0;
+        transition: var(--transition);
+    }
+    .navbar.scrolled {
+        background-color: rgba(255, 255, 255, 0.97);
+        box-shadow: var(--shadow);
+        padding: 0.75rem 0;
+        backdrop-filter: blur(8px);
+    }
+    .navbar.scrolled .navbar-brand,
+    .navbar.scrolled .nav-link {
+        color: var(--primary-dark) !important;
+    }
+    .navbar-brand {
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: var(--white);
+        transition: var(--transition);
+    }
+    .navbar-brand i { margin-right: 10px; color: #ffc107; }
+    .nav-link {
+        color: rgba(255, 255, 255, 0.9) !important;
+        font-weight: 500;
+        margin: 0 5px;
+        padding: 8px 15px !important;
+        border-radius: var(--border-radius);
+        transition: var(--transition);
+    }
+    .nav-link:hover, .nav-link.active {
+        color: var(--white) !important;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    .navbar.scrolled .nav-link:hover,
+    .navbar.scrolled .nav-link.active {
+        color: var(--primary) !important;
+        background-color: rgba(46, 125, 50, 0.1);
+    }
+
+    .hero-section {
+        background: linear-gradient(rgba(27, 94, 32, 0.8), rgba(46, 125, 50, 0.7)),
+                    url('https://images.unsplash.com/photo-1492496913980-501348b61469?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') center center/cover no-repeat fixed;
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        color: var(--white);
+        padding-top: 80px;
+    }
+    .hero-content { z-index: 1; max-width: 800px; }
+    .hero-title { font-size: 3.2rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.3); color: var(--white); }
+    .hero-subtitle { font-size: 1.25rem; opacity: 0.95; margin-bottom: 30px; }
+    .btn-whatsapp {
+        background-color: #25D366;
+        color: white;
+        font-weight: 600;
+        padding: 12px 30px;
+        border-radius: 50px;
+        transition: var(--transition);
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        border: none;
+        font-size: 1.1rem;
+    }
+    .btn-whatsapp:hover {
+        background-color: #128C7E;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+    }
+
+    .section {
+        padding: 80px 0;
+    }
+    .bg-light-green { background-color: var(--light); }
+    
+    .card-product, .card-news {
+        background: var(--white);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+        overflow: hidden;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .card-product:hover, .card-news:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+    }
+    .card-img-wrapper {
+        height: 220px;
+        overflow: hidden;
+    }
+    .card-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+    .card-product:hover .card-img, .card-news:hover .card-img {
+        transform: scale(1.05);
+    }
+    .card-body {
+        padding: 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 10px;
+        line-height: 1.4;
+    }
+    .card-text {
+        font-size: 0.9rem;
+        color: var(--text-light);
+        margin-bottom: 15px;
+        flex-grow: 1;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .btn-primary-outline {
+        border: 2px solid var(--primary);
+        color: var(--primary);
+        background-color: transparent;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+    .btn-primary-outline:hover {
+        background-color: var(--primary);
+        color: var(--white);
+    }
+
+    .product-price {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--secondary);
+        margin-bottom: 15px;
+    }
+    .card-product .card-body {
+        padding-bottom: 0;
+    }
+    .card-product .btn-pesan {
+        background-color: var(--primary);
+        color: var(--white);
+        border: 0;
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
+        padding: 12px;
+        margin: 15px -20px 0 -20px;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+    .card-product .btn-pesan:hover {
+        background-color: var(--primary-dark);
+    }
+
+    .history-image {
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-hover);
+    }
+    .history-content h3 {
+        font-weight: 700;
+        color: var(--primary-dark);
+        margin-bottom: 15px;
+    }
+    .history-content p {
+        font-size: 1rem;
+        line-height: 1.8;
+        color: var(--text-light);
     }
     
-    .footer-logo {
-        /* Memastikan logo berada di tengah */
+    /* === [BARU] Section Kontak & Peta === */
+    #kontak {
+        background-color: var(--light);
+    }
+    .contact-info-wrapper {
+        background: var(--white);
+        padding: 40px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
         justify-content: center;
     }
-
-    .social-links {
-        /* Memastikan ikon sosial media berada di tengah */
+    .contact-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 30px;
+    }
+    .contact-item:last-child {
+        margin-bottom: 0;
+    }
+    .contact-icon {
+        flex-shrink: 0;
+        width: 55px;
+        height: 55px;
+        background: rgba(46, 125, 50, 0.1);
+        color: var(--primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
         justify-content: center;
+        font-size: 1.3rem;
+        margin-right: 20px;
+        transition: var(--transition);
+    }
+    .contact-item:hover .contact-icon {
+        background: var(--primary);
+        color: var(--white);
+        transform: scale(1.1);
+    }
+    .contact-text h4 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: var(--dark);
+    }
+    .contact-text p {
+        margin: 0;
+        font-size: 1rem;
+        color: var(--text-light);
+        line-height: 1.6;
+    }
+    .contact-text p a {
+        color: var(--text-light);
+        text-decoration: none;
+        transition: var(--transition);
+        font-weight: 500;
+    }
+    .contact-text p a:hover {
+        color: var(--primary);
+    }
+
+    .map-container {
+        overflow: hidden;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        height: 100%;
+        min-height: 400px;
+    }
+    .map-container iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
     }
     
-    .footer-contact-info li {
-        /* Memastikan ikon dan teks kontak berada di tengah */
-        justify-content: center;
-        text-align: left; /* Teks kontak tetap rata kiri agar mudah dibaca */
+    /* === Footer (Desktop) === */
+    .footer {
+        background-color: var(--primary-dark);
+        color: rgba(255, 255, 255, 0.7);
+        padding: 60px 0 0;
     }
-
-    .footer-links li {
-        text-align: center;
+    .footer-title {
+        color: var(--white);
+        margin-bottom: 25px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        position: relative;
+        padding-bottom: 10px;
     }
-
+    .footer-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0;
+        width: 35px; height: 3px;
+        background: var(--secondary);
+    }
     .footer-links a {
-        /* Menghapus padding kiri agar teks bisa pas di tengah */
-        padding-left: 0;
-        display: inline-block; /* Agar hover transform bekerja dengan baik */
+        color: rgba(255, 255, 255, 0.7);
+        transition: var(--transition);
+        text-decoration: none;
+        font-size: 0.95rem;
     }
-
-    .footer-links a::before {
-        /* Menghilangkan ikon panah di mobile untuk tampilan lebih bersih */
-        display: none;
-    }
-    
     .footer-links a:hover {
-        /* Menghilangkan efek geser ke kanan di mobile */
-        transform: none;
+        color: var(--white);
+        padding-left: 5px;
     }
-}
+    .footer-bottom {
+        background-color: rgba(0, 0, 0, 0.2);
+        padding: 20px 0;
+        margin-top: 40px;
+    }
+    .footer-bottom p {
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+    /* ======= RESPONSIVE CSS ======= */
+    @media (max-width: 991.98px) {
+        .hero-title { font-size: 2.5rem; }
+        .hero-subtitle { font-size: 1.1rem; }
+    }
+
+    @media (max-width: 767.98px) {
+        /* ==== MOBILE OPTIMIZATION: SMALLER & MORE COMPACT ==== */
+        body { font-size: 14px; line-height: 1.6; }
+        .section { padding: 40px 0; }
+
+        .navbar-brand { font-size: 1.1rem; }
+        .nav-link { font-size: 0.9rem; padding: 6px 12px !important; }
+
+        .hero-section { min-height: 60vh; background-attachment: scroll; }
+        .hero-content { text-align: center; }
+        .hero-title { font-size: 1.6rem; }
+        .hero-subtitle { font-size: 0.9rem; margin-bottom: 20px; }
+        .btn-whatsapp { width: 90%; font-size: 0.95rem; padding: 10px 0; }
         
-        /* === Animations === */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .animated {
-            opacity: 0;
-        }
+        .pre-title { font-size: 0.8rem; }
+        .section-title { font-size: 1.3rem; margin-bottom: 40px;}
+        .section-title::after { width: 50px; height: 3px; bottom: -10px;}
 
-        .animated.animate-in {
-            animation: fadeInUp 0.8s ease forwards;
+        .history-image { margin-bottom: 20px; }
+        .history-content h3 { font-size: 1.2rem; }
+        .history-content p { font-size: 0.9rem; }
+
+        /* Horizontal Scroll */
+        .products-scroll-wrapper, .news-scroll-wrapper { position: relative; }
+        .products-scroll-wrapper::after, .news-scroll-wrapper::after {
+            content: ''; position: absolute; top: 0; right: 0; width: 40px; height: 100%;
+            background: linear-gradient(to left, var(--light), transparent);
+            pointer-events: none; z-index: 2;
         }
-        
-        /* === Responsive Design (Tablet & Larger) === */
-        @media (max-width: 991.98px) {
-            .hero-title { font-size: 2.8rem; }
-            .hero-subtitle { font-size: 1.2rem; }
-            
-            .history-content { text-align: center; }
-            
-            .excellence-section-revamped { padding: 60px 0; }
-            .excellence-content { margin-top: 40px; text-align: center; }
-            .excellence-content .section-title,
-            .excellence-content .lead { text-align: center; }
-            .excellence-content .section-title::after { left: 50%; transform: translateX(-50%); }
-            
-            .products-section .products-scroll-wrapper .row {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        #berita .news-scroll-wrapper::after { background: linear-gradient(to left, var(--white), transparent); }
+        .row-scroll {
+            display: flex; flex-wrap: nowrap; overflow-x: auto;
+            -webkit-overflow-scrolling: touch; margin: 0 -15px; padding: 4px 15px 15px 15px;
+            scrollbar-width: none; -ms-overflow-style: none;
+        }
+        .row-scroll::-webkit-scrollbar { display: none; }
+        .col-scroll-item {
+            padding: 0 6px; margin-bottom: 0 !important;
+        }
+        .col-product-item { flex: 0 0 48%; max-width: 48%; }
+        .col-scroll-item.col-md-4 { flex: 0 0 65%; max-width: 65%; }
 
-            .contact-section-revamped { padding: 60px 0; }
-            .contact-info-panel { padding: 40px 25px; }
-            .contact-panel-wrapper { background-color: transparent; box-shadow: none; border-radius: 0; }
-            .contact-info-panel, .map-wrapper {
-                border-radius: 1.5rem;
-                background-color: #ffffff;
-                box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
-            }
-            .map-wrapper { margin-top: 30px; }
+        .card-body { padding: 12px; }
+        .card-title { font-size: 0.95rem; }
+        .card-text { font-size: 0.8rem; -webkit-line-clamp: 2; }
+        .btn-primary-outline { font-size: 0.8rem; padding: 5px 10px; }
 
-            .footer-brand, .footer-widget { text-align: center; }
-            .social-links, .footer-links, .footer-contact-info { justify-content: center; }
-            .footer-contact-info li { text-align: left; }
+        .card-product .card-img-wrapper { height: 120px; }
+        .card-product .card-body { padding: 8px; }
+        .card-product .card-title {
+            font-size: 0.8rem; height: 2.4em; /* 2 baris */
+            line-height: 1.2; overflow: hidden;
+            margin-bottom: 5px;
+        }
+        .product-price { font-size: 1rem; margin-bottom: 8px; font-weight: 600; }
+        .card-product .btn-pesan {
+             margin: 8px -8px 0 -8px; padding: 8px;
+             font-size: 0.85rem;
         }
 
-        /* === Responsive Design (Mobile) === */
-        @media (max-width: 767.98px) {
-            /* Mengurangi padding vertikal agar tidak terlalu banyak scroll */
-            .history-section,
-            .activities-section,
-            .excellence-section-revamped,
-            .products-section,
-            .news-section,
-            .contact-section-revamped {
-                padding: 60px 0;
-            }
-            .footer-revamped {
-                padding-top: 60px;
-            }
+        /* [BARU] Mobile styles untuk contact section */
+        .contact-info-wrapper { padding: 25px 20px; }
+        .contact-icon { width: 45px; height: 45px; font-size: 1.1rem; margin-right: 15px; }
+        .contact-text h4 { font-size: 1rem; }
+        .contact-text p { font-size: 0.9rem; }
+        .map-container { min-height: 300px; }
 
-            .hero-section { min-height: auto; padding: 100px 0 120px 0; }
-            .hero-title { font-size: 2.2rem; }
-            .hero-subtitle { font-size: 1rem; }
-            .hero-stats { gap: 20px; margin-top: 40px; }
-            .hero-stat-number { font-size: 2rem; }
-            
-            .btn-hero-primary,
-            .btn-whatsapp {
-                padding: 12px 28px;
-                font-size: 1rem;
-            }
-            
-            .section-title { font-size: 1.8rem; }
-            
-            /* PERBAIKAN: History Section untuk Mobile */
-            .history-section .row {
-                flex-direction: column;
-                margin: 0;
-            }
-            
-            .history-section .col-lg-5,
-            .history-section .col-lg-7 {
-                padding: 0;
-                max-width: 100%;
-                flex: 0 0 100%;
-            }
-            
-            .history-image {
-                max-width: 100%;
-                margin-bottom: 20px;
-            }
-
-            /* PERBAIKAN: Products Section menjadi Carousel di Mobile */
-            .products-scroll-wrapper::after {
-                display: none;
-            }
-            
-            .products-section .products-scroll-wrapper .row {
-                display: flex;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                scroll-snap-type: x mandatory;
-                -webkit-overflow-scrolling: touch;
-                padding-bottom: 15px;
-                margin: 0 -15px; /* Kompensasi padding container agar full-width */
-                gap: 0; /* Hapus gap dari grid */
-            }
-
-            .col-product-item {
-                flex: 0 0 85%; /* Lebar setiap item carousel */
-                max-width: 85%;
-                scroll-snap-align: start;
-                padding: 0 8px; /* Jarak antar item */
-            }
-
-            /* Menambahkan padding kiri/kanan agar tidak menempel di tepi */
-            .col-product-item:first-child {
-                padding-left: 15px;
-            }
-            .col-product-item:last-child {
-                padding-right: 15px;
-            }
-
-            /* PERBAIKAN: News Section menjadi Carousel di Mobile */
-            .news-section .row {
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                scroll-snap-type: x mandatory;
-                -webkit-overflow-scrolling: touch;
-                margin: 0 -15px; /* Kompensasi padding container */
-                padding-bottom: 15px;
-            }
-            
-            .news-section .col-md-4 {
-                flex: 0 0 85%; /* Lebar setiap item carousel */
-                max-width: 85%;
-                scroll-snap-align: start;
-                padding: 0 8px; /* Jarak antar item */
-                margin-bottom: 0; /* Hapus margin-bottom dari .mb-4 */
-            }
-
-            /* Menambahkan padding kiri/kanan agar tidak menempel di tepi */
-            .news-section .col-md-4:first-child {
-                padding-left: 15px;
-            }
-            .news-section .col-md-4:last-child {
-                padding-right: 15px;
-            }
+        /* [DIUBAH] Footer (Mobile Optimization) - Tidak lagi disembunyikan */
+        .footer {
+            padding: 40px 0 0; /* Memberi padding atas di mobile */
+            text-align: center; /* Meratakan semua teks di footer ke tengah */
         }
-    </style>
+        .footer-main-content .col-lg-5,
+        .footer-main-content .col-lg-3,
+        .footer-main-content .col-lg-4 {
+            margin-bottom: 30px; /* Jarak antar widget saat bertumpuk */
+        }
+        .footer-title::after {
+            left: 50%; /* Posisikan garis bawah di tengah */
+            transform: translateX(-50%);
+        }
+        .footer-bottom {
+            margin-top: 10px; /* Kurangi jarak dari widget terakhir */
+        }
+        .footer-bottom p { font-size: 0.8rem; }
+    }
+</style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-leaf"></i>KWT Wonomulyo
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Beranda</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#kegiatan">Kegiatan</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#produk">Produk</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#berita">Berita</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#kontak">Kontak</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="admin.php">
-                            <i class="fas fa-lock me-1"></i>Admin
-                        </a>
-                    </li>
-                </ul>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-leaf"></i> KWT Wonomulyo
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link active" href="#">Beranda</a></li>
+                <li class="nav-item"><a class="nav-link" href="#sejarah">Tentang</a></li>
+                <li class="nav-item"><a class="nav-link" href="#produk">Produk</a></li>
+                <li class="nav-item"><a class="nav-link" href="#berita">Berita</a></li>
+                <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
+                <li class="nav-item"><a class="nav-link" href="admin.php"><i class="fas fa-lock me-1"></i>Admin</a></li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
+<section class="hero-section text-center text-lg-start">
+    <div class="container">
         <div class="hero-content">
             <h1 class="hero-title">KWT Wonomulyo</h1>
-            <p class="hero-subtitle">Kelompok Wanita Tani Wonomulyo berkomitmen menumbuhkan produk lokal berkualitas, memperkuat ekonomi keluarga, dan melestarikan lingkungan.</p>
-            <div class="hero-buttons">
-                <a href="#kegiatan" class="btn-hero-primary">
-                    <i class="fas fa-seedling me-2"></i>Lihat Kegiatan Kami
-                </a>
-                <a href="https://api.whatsapp.com/send?phone=<?= $nomor_wa ?>&text=Halo%20KWT%20Wonomulyo,%20saya%20tertarik%20untuk%20mengetahui%20lebih%20lanjut." target="_blank" class="btn-whatsapp">
-                    <i class="fab fa-whatsapp me-2"></i>Hubungi Kami
-                </a>
-            </div>
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <span class="hero-stat-number">25+</span>
-                    <span class="hero-stat-label">Anggota Aktif</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-number">5+</span>
-                    <span class="hero-stat-label">Jenis Produk Lokal</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-number">100%</span>
-                    <span class="hero-stat-label">Organik & Alami</span>
-                </div>
-            </div>
+            <p class="hero-subtitle">Menumbuhkan produk lokal berkualitas, memperkuat ekonomi keluarga, dan melestarikan lingkungan.</p>
+            <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($nomor_wa) ?>&text=Halo%20KWT%20Wonomulyo,%20saya%20tertarik%20untuk%20mengetahui%20lebih%20lanjut." target="_blank" class="btn btn-whatsapp d-inline-flex align-items-center justify-content-center">
+                <i class="fab fa-whatsapp me-2"></i>Hubungi Kami
+            </a>
         </div>
-        <div class="scroll-indicator">
-            <a href="#kegiatan"><i class="fas fa-chevron-down"></i></a>
-        </div>
-    </section>
+    </div>
+</section>
 
-    <!-- History Section -->
-    <section id="sejarah" class="history-section">
-        <div class="container">
-            <div class="row justify-content-center mb-5">
-                <div class="col-lg-8 text-center">
-                    <span class="pre-title">AWAL MULA KAMI</span>
-                    <h2 class="section-title">Dari Pelatihan Hingga Kemandirian</h2>
-                </div>
+<section id="sejarah" class="section">
+    <div class="container">
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8 text-center">
+                <span class="pre-title">AWAL MULA KAMI</span>
+                <h2 class="section-title">Dari Pelatihan Hingga Kemandirian</h2>
             </div>
-            <div class="row align-items-center g-5">
-                <div class="col-lg-5 text-center">
-                    <img src="uploads/logo.png" class="img-fluid rounded-3 shadow-lg history-image" alt="Kegiatan Kelompok Wanita Tani Wonomulyo">
-                </div>
-                <div class="col-lg-7">
-                    <div class="history-content">
-                        <h3 class="history-subtitle">Terbentuk pada 4 Januari 2023</h3>
-                        <p class="history-text">
-                            KWT Wonomulyo, yang beranggotakan 10 orang, lahir dari gagasan setelah mengikuti pelatihan di BLK Wonojati. Kami memilih untuk fokus mengolah singkong yang melimpah di desa kami sebagai cara mengangkat potensi lokal. Dari bahan baku asli Wonomulyo ini, kami menciptakan beragam produk seperti keripik, samiler, stik, jemblem, dan getuk.
-                        </p>
-                        <blockquote class="history-quote">
-                            <i class="fas fa-quote-left"></i>
-                            Setiap produk yang kami hasilkan adalah cerita tentang kerja keras, kebersamaan, dan cinta kami pada hasil bumi lokal.
-                        </blockquote>
-                    </div>
+        </div>
+        <div class="row align-items-center g-5">
+            <div class="col-lg-5 text-center">
+                <img src="uploads/logo.png" class="img-fluid history-image" alt="Logo KWT Wonomulyo" />
+            </div>
+            <div class="col-lg-7">
+                <div class="history-content">
+                    <h3>Terbentuk pada 4 Januari 2023</h3>
+                    <p>
+                        Kami memilih untuk fokus mengolah singkong yang melimpah di desa kami sebagai cara mengangkat potensi lokal dan memberdayakan anggota.
+                    </p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Activities Section -->
-    <section id="kegiatan" class="activities-section">
-        <div class="container">
-            <div class="row justify-content-center mb-5">
-                <div class="col-lg-8 text-center animated" data-animation="fadeInUp">
-                    <span class="pre-title">APA YANG KAMI LAKUKAN</span>
-                    <h2 class="section-title">Kegiatan Utama Kami</h2>
-                </div>
-            </div>
-            <div class="row g-4 justify-content-center">
-                <div class="col-lg-4 col-md-6 animated" data-animation="fadeInUp" style="animation-delay: 0.1s;">
-                    <div class="activity-card">
-                        <div class="activity-icon"><i class="fas fa-leaf"></i></div>
-                        <div class="activity-content">
-                            <h4 class="activity-title">Budidaya Singkong</h4>
-                            <p>Mengembangkan singkong yang segar, sehat untuk keluarga dan ramah lingkungan.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 animated" data-animation="fadeInUp" style="animation-delay: 0.2s;">
-                    <div class="activity-card">
-                        <div class="activity-icon"><i class="fas fa-box-open"></i></div>
-                        <div class="activity-content">
-                            <h4 class="activity-title">Pengolahan Produk</h4>
-                            <p>Menciptakan produk olahan bernilai tambah dari hasil panen, seperti keripik, stik, dan olahan lainnya.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 animated" data-animation="fadeInUp" style="animation-delay: 0.3s;">
-                    <div class="activity-card">
-                        <div class="activity-icon"><i class="fas fa-store"></i></div>
-                        <div class="activity-content">
-                            <h4 class="activity-title">Pemasaran Bersama</h4>
-                            <p>Menjual produk secara kolektif untuk menjangkau pasar yang lebih luas dan mendapatkan harga yang adil.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<section id="produk" class="section bg-light-green">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="pre-title">PILIHAN TERBAIK</span>
+            <h2 class="section-title">Produk Unggulan Kami</h2>
         </div>
-    </section>
-
-    <!-- Excellence Section -->
-    <section id="keunggulan" class="excellence-section-revamped">
-        <div class="container">
-            <div class="row align-items-center g-5">
-                <div class="col-lg-5 animated" data-animation="fadeInLeft">
-                    <div class="excellence-image-wrapper">
-                        <div class="image-background-shape"></div>
-                        <img src="uploads/petani.jpeg" class="img-fluid rounded-3 shadow-lg" alt="Kelompok Wanita Tani di kebun">
-                    </div>
-                </div>
-                <div class="col-lg-7 animated" data-animation="fadeInRight">
-                    <div class="excellence-content">
-                        <span class="pre-title">MENGAPA KAMI BERBEDA</span>
-                        <h2 class="section-title">Dibangun dari Hati, untuk Negeri</h2>
-                        <p class="lead text-muted mb-4">
-                            Kami percaya bahwa kekuatan gotong royong dan kearifan lokal adalah fondasi untuk menciptakan kemandirian ekonomi yang berkelanjutan.
-                        </p>
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <div class="feature-card">
-                                    <div class="feature-icon"><i class="fas fa-seedling"></i></div>
-                                    <h5 class="feature-title">Produk Segar & Sehat</h5>
-                                    <p class="feature-text">Hasil panen langsung dari kebun kami yang diolah secara alami.</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="feature-card">
-                                    <div class="feature-icon"><i class="fas fa-hand-holding-heart"></i></div>
-                                    <h5 class="feature-title">Ramah Lingkungan</h5>
-                                    <p class="feature-text">Menggunakan pupuk organik dan metode pertanian berkelanjutan.</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="feature-card">
-                                    <div class="feature-icon"><i class="fas fa-users"></i></div>
-                                    <h5 class="feature-title">Pemberdayaan Komunitas</h5>
-                                    <p class="feature-text">Setiap pembelian mendukung langsung ekonomi para wanita tani.</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <a href="#kontak" class="feature-card action-card">
-                                    <div class="action-content">
-                                        <h5 class="feature-title text-white">Dukung Kami</h5>
-                                        <p class="feature-text text-white-50">Jadilah bagian dari perubahan positif ini.</p>
-                                        <span class="action-arrow"><i class="fas fa-arrow-right"></i></span>
+        <?php if (empty($produk_unggulan)): ?>
+            <div class="alert alert-light text-center">Belum ada produk unggulan.</div>
+        <?php else: ?>
+            <div class="products-scroll-wrapper">
+                <div class="row row-scroll">
+                    <?php foreach($produk_unggulan as $item): ?>
+                        <div class="col-lg-3 col-md-6 mb-4 col-scroll-item col-product-item">
+                            <div class="card-product">
+                                <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($nomor_wa) ?>&text=Halo%2C%20saya%20tertarik%20memesan%20*<?= urlencode($item['nama_produk']) ?>*." target="_blank" class="text-decoration-none">
+                                    <div class="card-img-wrapper">
+                                        <?php if (!empty($item['gambar']) && file_exists('uploads/produk/' . $item['gambar'])): ?>
+                                            <img src="uploads/produk/<?= htmlspecialchars($item['gambar']) ?>" class="card-img" alt="<?= htmlspecialchars($item['nama_produk']) ?>">
+                                        <?php else: ?>
+                                            <img src="https://via.placeholder.com/400x300.png/E8F5E9/1B5E20?text=Produk" class="card-img" alt="<?= htmlspecialchars($item['nama_produk']) ?>">
+                                        <?php endif; ?>
                                     </div>
+                                </a>
+                                <div class="card-body">
+                                    <h5 class="card-title text-dark"><?= htmlspecialchars($item['nama_produk']) ?></h5>
+                                    <div class="mt-auto">
+                                        <div class="product-price">Rp <?= number_format($item['harga'], 0, ',', '.') ?></div>
+                                    </div>
+                                </div>
+                                <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($nomor_wa) ?>&text=Halo%2C%20saya%20tertarik%20memesan%20*<?= urlencode($item['nama_produk']) ?>*." target="_blank" class="btn btn-pesan d-flex align-items-center justify-content-center">
+                                    <i class="fab fa-whatsapp me-2"></i>Pesan Sekarang
                                 </a>
                             </div>
                         </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
-        </div>
-    </section>
+            <div class="text-center mt-5">
+                <a href="produk.php" class="btn btn-primary-outline py-2 px-4">
+                    Lihat Semua Produk <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        <?php endif; ?>
+    </div>
+</section>
 
-    <!-- Products Section -->
-    <section id="produk" class="products-section">
-        <div class="container">
-            <div class="row justify-content-center mb-5">
-                <div class="col-lg-8 text-center">
-                    <span class="pre-title">PILIHAN TERBAIK</span>
-                    <h2 class="section-title">Produk Unggulan Kami</h2>
-                </div>
+<section id="berita" class="section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="pre-title">KABAR TERKINI</span>
+            <h2 class="section-title">Kegiatan & Berita Terbaru</h2>
+        </div>
+        <?php if(empty($berita)): ?>
+            <div class="text-center py-5">
+                <h4 class="text-muted">Belum ada berita untuk ditampilkan.</h4>
             </div>
-            
-            <?php if (empty($produk_unggulan)): ?>
-                <div class="alert alert-light text-center">
-                    Saat ini belum ada produk unggulan yang ditampilkan.
-                </div>
-            <?php else: ?>
-                <div class="products-scroll-wrapper">
-                    <div class="row">
-                        <?php foreach($produk_unggulan as $index => $item): ?>
-                            <div class="col-product-item animated" style="animation-delay: <?= $index * 0.1 ?>s;">
-                                <div class="product-card">
-                                    <div class="product-img-wrapper">
-                                        <?php if (!empty($item['gambar']) && file_exists('uploads/produk/' . $item['gambar'])): ?>
-                                            <img src="uploads/produk/<?= htmlspecialchars($item['gambar']) ?>" class="product-img" alt="<?= htmlspecialchars($item['nama_produk']) ?>">
+        <?php else: ?>
+            <div class="news-scroll-wrapper">
+                <div class="row row-scroll">
+                    <?php foreach($berita as $item): ?>
+                        <div class="col-md-4 mb-4 col-scroll-item">
+                            <div class="card-news">
+                                <a href="detail_berita.php?id=<?= urlencode($item['id_berita']) ?>" class="text-decoration-none">
+                                    <div class="card-img-wrapper">
+                                        <?php if(!empty($item['gambar']) && file_exists('uploads/' . $item['gambar'])): ?>
+                                            <img src="uploads/<?= htmlspecialchars($item['gambar']) ?>" class="card-img" alt="<?= htmlspecialchars($item['judul']) ?>">
                                         <?php else: ?>
-                                            <div class="product-img-placeholder">
-                                                <i class="fas fa-leaf fa-3x"></i>
-                                            </div>
+                                            <img src="https://via.placeholder.com/400x300.png/f0f7f0/1B5E20?text=Berita" class="card-img" alt="<?= htmlspecialchars($item['judul']) ?>">
                                         <?php endif; ?>
-                                        <div class="product-badge">Tersedia</div>
                                     </div>
-                                    <div class="product-card-body">
-                                        <p class="product-brand">RBY SNACK</p>
-                                        <h5 class="product-title"><?= htmlspecialchars($item['nama_produk']) ?></h5>
-                                        <p class="product-desc"><?= htmlspecialchars($item['deskripsi']) ?></p>
-                                        <div class="product-footer">
-                                            <div class="product-price">Rp <?= number_format($item['harga'], 0, ',', '.') ?></div>
-                                            <a href="https://api.whatsapp.com/send?phone=<?= $nomor_wa ?>&text=Halo%2C%20saya%20tertarik%20untuk%20memesan%20produk%20*<?= urlencode($item['nama_produk']) ?>*." target="_blank" class="btn btn-primary w-100">
-                                                <i class="fab fa-whatsapp me-2"></i>Pesan Sekarang
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-                <div class="text-center mt-5">
-                    <a href="produk.php" class="btn btn-outline-primary fw-bold py-2 px-4">
-                        Lihat Semua Produk <i class="fas fa-arrow-right ms-2"></i>
-                    </a>
-                </div>
-            <?php endif; ?>
-        </div>
-    </section>
-
-    <!-- News Section -->
-    <section id="berita" class="news-section">
-        <div class="container">
-            <div class="row justify-content-center mb-5">
-                <div class="col-lg-8 text-center">
-                    <span class="pre-title">KABAR TERKINI</span>
-                    <h2 class="section-title">Kegiatan Terbaru kami</h2>
-                </div>
-            </div>
-            <div class="row">
-                <?php if(empty($berita)): ?>
-                    <div class="col-12 text-center py-5 animated">
-                        <h4>Belum ada berita</h4>
-                        <p class="text-muted">Kegiatan dan informasi terbaru dari kelompok akan ditampilkan di sini.</p>
-                    </div>
-                <?php else: ?>
-                    <?php foreach($berita as $index => $item): ?>
-                        <div class="col-md-4 mb-4 animated" style="animation-delay: <?= $index * 0.1 ?>s;">
-                            <div class="news-card">
-                                <?php if(!empty($item['gambar']) && file_exists('uploads/' . $item['gambar'])): ?>
-                                    <img src="uploads/<?= htmlspecialchars($item['gambar']) ?>" class="news-img" alt="<?= htmlspecialchars($item['judul']) ?>">
-                                <?php else: ?>
-                                    <div class="news-img bg-secondary d-flex align-items-center justify-content-center">
-                                        <i class="fas fa-image fa-3x text-white"></i>
-                                    </div>
-                                <?php endif; ?>
-                                <div class="news-date">
-                                    <i class="fas fa-calendar me-1"></i><?= date('d M Y', strtotime($item['tanggal'])) ?>
-                                </div>
-                                <div class="news-body">
-                                    <h5 class="news-title"><?= htmlspecialchars($item['judul']) ?></h5>
-                                    <p class="news-text"><?= htmlspecialchars(substr(strip_tags($item['isi']), 0, 120)) ?>...</p>
-                                    <a href="detail_berita.php?id=<?= urlencode($item['id_berita']) ?>" class="read-more">
-                                        Baca Selengkapnya <i class="fas fa-arrow-right"></i>
+                                </a>
+                                <div class="card-body">
+                                    <h5 class="card-title text-dark"><?= htmlspecialchars($item['judul']) ?></h5>
+                                    <p class="card-text"><?= htmlspecialchars(substr(strip_tags($item['isi']), 0, 100)) ?>...</p>
+                                    <a href="detail_berita.php?id=<?= urlencode($item['id_berita']) ?>" class="btn btn-primary-outline mt-auto">
+                                        Baca Selengkapnya
                                     </a>
                                 </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
-                <?php endif; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+</section>
+
+<!-- =======================================================
+     BAGIAN KONTAK & PETA (TAMPILAN BARU YANG LEBIH BAIK)
+     ======================================================== -->
+<section id="kontak" class="section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="pre-title">TEMUKAN KAMI</span>
+            <h2 class="section-title">Lokasi & Kontak</h2>
+        </div>
+        <div class="row g-lg-5 align-items-stretch">
+            <!-- Kolom Informasi Kontak -->
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <div class="contact-info-wrapper">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Alamat</h4>
+                            <p>Dusun Wonorejo, Desa Wonomulyo,<br>Kec. Poncokusumo, Kab. Malang, Jawa Timur</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>WhatsApp</h4>
+                            <p><a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($nomor_wa) ?>" target="_blank">+<?= htmlspecialchars(chunk_split($nomor_wa, 4, ' ')) ?></a></p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Email</h4>
+                            <p><a href="mailto:info.kwtwonomulyo@gmail.com">info.kwtwonomulyo@gmail.com</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kolom Peta Google -->
+            <div class="col-lg-6">
+                <div class="map-container">
+                    <!-- CATATAN: Ganti 'src' dengan kode embed Google Maps Anda. Cari lokasi di Google Maps, klik Bagikan > Sematkan peta > SALIN HTML. -->
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15799.309489542176!2d112.7840138243469!3d-8.118239077694925!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd621f2a41a2935%3A0x5a3597b5e4822003!2sWonomulyo%2C%20Kec.%20Poncokusumo%2C%20Kabupaten%20Malang%2C%20Jawa%20Timur!5e0!3m2!1sid!2sid!4v1691565432109!5m2!1sid!2sid" 
+                            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Contact Section -->
-    <section id="kontak" class="contact-section-revamped">
-        <div class="container">
-            <div class="row justify-content-center mb-5">
-                <div class="col-lg-8 text-center animated" data-animation="fadeInUp">
-                    <span class="pre-title">MARI TERHUBUNG</span>
-                    <h2 class="section-title">Kunjungi & Hubungi Kami</h2>
-                    <p class="lead text-muted">Kami sangat senang jika Anda ingin berkunjung, membeli produk, atau sekadar berdiskusi.</p>
-                </div>
-            </div>
-            <div class="contact-panel-wrapper shadow">
-                <div class="row g-0">
-                    <div class="col-lg-6">
-                        <div class="contact-info-panel">
-                            <h3 class="panel-title">Informasi Kontak</h3>
-                            <div class="contact-item">
-                                <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
-                                <div class="text-box">
-                                    <strong>Alamat</strong>
-                                    <p>Desa Robyong RT47, RW12 Wonomulyo, Poncokusumo, Malang</p>
-                                </div>
-                            </div>
-                            <div class="contact-item">
-                                <div class="icon-box"><i class="fab fa-whatsapp"></i></div>
-                                <div class="text-box">
-                                    <strong>WhatsApp</strong>
-                                    <p><a href="https://api.whatsapp.com/send?phone=<?= $nomor_wa ?>&text=Halo%20KWT%20Wonomulyo" target="_blank">+<?= substr($nomor_wa, 0, 2) . ' ' . substr($nomor_wa, 2) ?></a></p>
-                                </div>
-                            </div>
-                            <hr class="my-4">
-                            <h4 class="panel-subtitle">Jam Operasional</h4>
-                            <ul class="list-unstyled op-hours">
-                                <li><span>Senin - Sabtu</span> <span class="badge bg-primary-soft">08:00 - 16:00</span></li>
-                                <li><span>Minggu & Hari Libur</span> <span class="badge bg-secondary-soft">Tutup</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="map-wrapper">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7901.205012555523!2d112.75963249748747!3d-8.039851971532162!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd624ff2e6802dd%3A0xdf8faadaaa7043b2!2sRobyong%2C%20Wonomulyo%2C%20Kec.%20Poncokusumo%2C%20Kabupaten%20Malang%2C%20Jawa%20Timur!5e0!3m2!1sid!2sid!4v1751857417844!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Footer -->
-    <footer id="footer" class="footer-revamped">
-        <div class="container">
-            <div class="row g-5">
-                <div class="col-lg-4 col-md-12">
-                    <div class="footer-widget footer-brand">
-                        <h4 class="footer-logo">
-                            <i class="fas fa-leaf"></i>KWT Wonomulyo
-                        </h4>
-                        <p class="footer-about">
-                            Sebuah komunitas wanita tani yang berdaya, menghasilkan produk lokal berkualitas dengan semangat gotong royong dan cinta pada alam.
-                        </p>
-                        <div class="social-links">
-                            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                            <a href="https://api.whatsapp.com/send?phone=<?= $nomor_wa ?>" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="footer-widget">
-                        <h5 class="footer-title">Navigasi</h5>
-                        <ul class="footer-links">
-                            <li><a href="#">Beranda</a></li>
-                            <li><a href="#keunggulan">Keunggulan</a></li>
-                            <li><a href="#kegiatan">Kegiatan</a></li>
-                            <li><a href="#produk">Produk</a></li>
-                            <li><a href="#kontak">Kontak Kami</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="footer-widget">
-                        <h5 class="footer-title">Hubungi Kami</h5>
-                        <ul class="footer-contact-info">
-                            <li>
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Wonomulyo, Poncokusumo, Malang</span>
-                            </li>
-                            <li>
-                                <i class="fas fa-phone-alt"></i>
-                                <a href="https://api.whatsapp.com/send?phone=<?= $nomor_wa ?>" target="_blank">+<?= substr($nomor_wa, 0, 2) . ' ' . substr($nomor_wa, 2) ?></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p class="copyright-text">
-                    © <?= date('Y') ?> Kelompok Wanita Tani Wonomulyo. Hak Cipta Dilindungi.
+<!-- =======================================================
+     FOOTER (DISEDERHANAKAN & RESPONSIF)
+     ======================================================== -->
+<footer class="footer">
+    <!-- Konten Utama Footer (Kini Tampil di Mobile) -->
+    <div class="container footer-main-content">
+        <div class="row">
+            <div class="col-lg-5 col-md-12 mb-4 mb-lg-0">
+                <h5 class="footer-title">KWT Wonomulyo</h5>
+                <p class="pe-lg-4">
+                    Sebuah kelompok wanita tani yang berdedikasi untuk mengolah hasil bumi lokal menjadi produk unggulan, demi kemandirian ekonomi dan pemberdayaan masyarakat desa.
                 </p>
             </div>
+            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                <h5 class="footer-title">Tautan Cepat</h5>
+                <ul class="list-unstyled footer-links">
+                    <li><a href="#"><i class="fas fa-angle-right me-2"></i>Beranda</a></li>
+                    <li><a href="#sejarah"><i class="fas fa-angle-right me-2"></i>Tentang</a></li>
+                    <li><a href="#produk"><i class="fas fa-angle-right me-2"></i>Produk</a></li>
+                    <li><a href="#berita"><i class="fas fa-angle-right me-2"></i>Berita</a></li>
+                    <li><a href="#kontak"><i class="fas fa-angle-right me-2"></i>Kontak</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <h5 class="footer-title">Informasi</h5>
+                <p>Kunjungi kami untuk melihat langsung proses produksi dan membeli produk segar hasil olahan kami.</p>
+            </div>
         </div>
-    </footer>
+    </div>
+    
+    <!-- Footer Bottom (Selalu ditampilkan) -->
+    <div class="footer-bottom">
+        <div class="container text-center">
+            <p>© <?= date('Y') ?> Kelompok Wanita Tani Wonomulyo. All Rights Reserved.</p>
+        </div>
+    </div>
+</footer>
 
-    <!-- JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const navbar = document.querySelector('.navbar');
-            const animatedElements = document.querySelectorAll('.animated');
 
-            // Efek navbar saat scroll
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
-            });
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('section');
+        const footer = document.querySelector('.footer');
 
-            // Animasi saat elemen terlihat di layar
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate-in');
-                        observer.unobserve(entry.target);
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            // Cek jika user sudah scroll sampai footer
+            if ((window.innerHeight + window.scrollY) >= footer.offsetTop) {
+                 current = 'kontak';
+            } else {
+                 sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 150) {
+                        current = section.getAttribute('id');
                     }
                 });
-            }, {
-                threshold: 0.1
-            });
+            }
 
-            animatedElements.forEach(el => {
-                observer.observe(el);
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                     link.classList.add('active');
+                } else if (!current && link.getAttribute('href') === '#') {
+                    // Jika paling atas, aktifkan link Beranda
+                    link.classList.add('active');
+                }
             });
         });
-    </script>
+    });
+</script>
 </body>
 </html>
